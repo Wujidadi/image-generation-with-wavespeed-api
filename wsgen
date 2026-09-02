@@ -1,0 +1,84 @@
+#!/usr/bin/env python3
+"""WaveSpeed 文生圖腳本的共用入口。
+
+以 -m/--model 指定模型名稱（對應 scripts/<模型名稱>.py），其餘參數原樣轉交給該腳本。
+可從任意目錄執行，腳本位置以本檔案所在目錄推算，經符號連結呼叫亦可。
+
+用法範例：
+    wsgen --list
+    wsgen -m seedream-v4.5 --size 1440x2560
+    wsgen -m grok-imagine-image-v2.0-text-to-image -p prompts/xxx.txt --resolution 1k
+    wsgen -m seedream-v4.5 --help          顯示該模型腳本自己的參數說明
+"""
+
+import os
+import sys
+from pathlib import Path
+
+SCRIPTS_DIR = Path(__file__).resolve().parent / "scripts"
+COMMON_MODULE = "wavespeed_common"
+
+
+def available_models() -> list[str]:
+    return sorted(p.stem for p in SCRIPTS_DIR.glob("*.py") if p.stem != COMMON_MODULE)
+
+
+def usage(error: str | None = None) -> None:
+    stream = sys.stderr if error else sys.stdout
+    if error:
+        print(f"錯誤：{error}\n", file=stream)
+    print(__doc__.strip(), file=stream)
+    print("\n可用模型：", file=stream)
+    for name in available_models():
+        print(f"    {name}", file=stream)
+    sys.exit(2 if error else 0)
+
+
+def normalize(model: str) -> str:
+    """接受腳本名、含 .py 的檔名，或 供應商/模型路徑 形式的模型 ID"""
+    if "/" in model:
+        model = model.split("/", 1)[1].replace("/", "-")
+    return model.removesuffix(".py")
+
+
+def split_args(argv: list[str]) -> tuple[str | None, list[str]]:
+    """取出 -m/--model 的值，其餘參數依原順序保留"""
+    model = None
+    rest: list[str] = []
+    index = 0
+    while index < len(argv):
+        arg = argv[index]
+        if arg in ("-m", "--model"):
+            if index + 1 >= len(argv):
+                usage(f"{arg} 後面缺少模型名稱")
+            model = argv[index + 1]
+            index += 2
+            continue
+        if arg.startswith("--model="):
+            model = arg.partition("=")[2]
+        elif arg.startswith("-m") and len(arg) > 2 and not arg.startswith("--"):
+            model = arg[2:]
+        else:
+            rest.append(arg)
+        index += 1
+    return model, rest
+
+
+def main() -> None:
+    argv = sys.argv[1:]
+    if "--list" in argv:
+        print("\n".join(available_models()))
+        return
+    model, rest = split_args(argv)
+    if model is None:
+        if not argv or "-h" in argv or "--help" in argv:
+            usage()
+        usage("請以 -m/--model 指定模型")
+    script = SCRIPTS_DIR / f"{normalize(model)}.py"
+    if not script.is_file():
+        usage(f"找不到模型 {model!r} 對應的腳本：{script}")
+    os.execv(sys.executable, [sys.executable, str(script), *rest])
+
+
+if __name__ == "__main__":
+    main()
