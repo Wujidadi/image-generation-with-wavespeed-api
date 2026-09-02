@@ -1,0 +1,35 @@
+# OS metadata
+.DS_Store
+Thumbs.db
+[Dd]esktop.ini
+$RECYCLE.BIN/
+
+# VS Code & IDEs
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+.idea/
+
+# Python bytecode & cache
+__pycache__/
+*.py[cod]
+*$py.class
+.pytest_cache/
+.ruff_cache/
+.mypy_cache/
+
+# Virtual environments & env files
+.venv/
+venv/
+env/
+.env
+
+# Generated outputs
+*.png
+*.jpg
+*.jpeg
+*.webp
+*.mov
+*.mp4
