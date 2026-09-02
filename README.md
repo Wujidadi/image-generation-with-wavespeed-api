@@ -1,3 +1,71 @@
 # Image Generation with WaveSpeed API
 
-A repository for generating images using the WaveSpeed API.
+以 [WaveSpeed](https://wavespeed.ai/) 的 REST API 進行文生圖的腳本集，只依賴 Python 3 標準函式庫。
+
+## 環境需求
+
+- Python 3.10 以上。
+- WaveSpeed API 金鑰，二擇一設定：
+  - 環境變數 `WAVESPEED_API_KEY`。
+  - 專案根目錄的 `.env` 檔，格式見 `.env.example`。
+    既有環境變數優先，`.env` 只補上未設定的變數。
+
+## 使用方式
+
+`wsgen` 是共用入口，以 `-m/--model` 指定模型，其餘參數原樣轉交給對應的 `scripts/<模型名稱>.py`。
+可從任意目錄執行，也可建立符號連結放進 `PATH`。
+
+```bash
+./wsgen --list
+./wsgen -m seedream-v4.5 --size 1440x2560
+./wsgen -m grok-imagine-image-v2.0-text-to-image -p prompts/xxx.txt -o output/xxx --resolution 1k
+./wsgen -m seedream-v4.5 --help
+```
+
+模型名稱可寫腳本名、含 `.py` 的檔名，或 `bytedance/seedream-v4.5` 形式的模型 ID。
+直接執行 `python3 scripts/<模型名稱>.py ...` 效果相同。
+
+### 共用參數
+
+| 參數                  | 預設值                | 說明                                             |
+| --------------------- | --------------------- | ------------------------------------------------ |
+| `-p`, `--prompt-file` | `prompts/default.txt` | 提示詞檔案，行首為 `#` 或 `//` 的整行視為註解    |
+| `--prompt`            | 無                    | 直接指定提示詞文字，與 `--prompt-file` 互斥      |
+| `-o`, `--output-dir`  | `output/<模型名稱>/`  | 輸出目錄，不存在時遞迴建立，提交任務前先檢查可寫 |
+| `--task-id`           | 無                    | 不重新提交，直接取回既有任務的輸出               |
+| `--poll-interval`     | `2`                   | 輪詢間隔秒數                                     |
+| `--timeout`           | `300`                 | 等待結果的上限秒數                               |
+
+### 模型專屬參數
+
+`grok-imagine-image-v2.0-text-to-image`（每張 $0.05）：
+
+| 參數             | 預設值   | 可選值                                                                                  |
+| ---------------- | -------- | --------------------------------------------------------------------------------------- |
+| `--aspect-ratio` | `1:1`    | `1:1` `16:9` `9:16` `4:3` `3:4` `3:2` `2:3` `2:1` `1:2` `19.5:9` `9:19.5` `20:9` `9:20` |
+| `--resolution`   | `2k`     | `1k` `2k`                                                                               |
+| `--quality`      | `medium` | `low` `medium`                                                                          |
+
+`seedream-v4.5`（每張 $0.04）：
+
+| 參數     | 預設值      | 說明                                                               |
+| -------- | ----------- | ------------------------------------------------------------------ |
+| `--size` | `2048*2048` | 格式 `寬x高` 或 `寬*高`，單邊 512 到 8192；後者在 shell 中需加引號 |
+
+### 輸出與補救
+
+- 輸出檔名為 `<任務建立時間>-<任務 ID>.<副檔名>`，時間為本地時區；多張輸出時再加序號。
+- 任務提交後以任務 ID 輪詢結果。輪詢階段遇到連線中斷或伺服器 5xx 會自動重試，直到 `--timeout`。
+- 若仍失敗，任務通常已在雲端完成，改用 `--task-id <任務 ID>` 即可重新取回，不會再次扣費。
+
+## 目錄結構
+
+| 路徑                          | 內容                                                    |
+| ----------------------------- | ------------------------------------------------------- |
+| `wsgen`                       | 共用入口腳本                                            |
+| `scripts/wavespeed_common.py` | 共用邏輯：金鑰載入、提示詞讀取、提交、輪詢、下載        |
+| `scripts/<模型名稱>.py`       | 各模型腳本，只定義模型 ID、專屬參數與 payload           |
+| `prompts/`                    | 提示詞檔                                                |
+| `output/`                     | 預設輸出目錄，圖片副檔名已在 `.gitignore` 排除          |
+| `documents/`                  | 從 WaveSpeed 下載的官方 API 文件、原始 HTML 與 llms.txt |
+| `sdk/sample/`                 | 官方模型頁 Quick start 的 cURL、Node.js、Python 範例    |
