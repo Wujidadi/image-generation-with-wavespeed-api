@@ -38,41 +38,62 @@
 
 ### 模型專屬參數
 
-`grok-imagine-image-v2.0-text-to-image`（每張 $0.05）：
+共 45 個模型。各參數的可選值與預設值以 `./wsgen -m <模型名稱> --help` 為準。
+「每張價格」為全用預設參數時的單張定價，括號內是把計費參數拉到最低與最高檔位的範圍；
+完整的價格區間、影響計費的參數與帳戶折扣見 [模型價格總表](documents/price.md)，
+調查方法與測試成本見 [模型價格調查與測試成本](.claude/plans/model-pricing-and-test-cost.md)。
 
-| 參數             | 預設值   | 可選值                                                                                  |
-| ---------------- | -------- | --------------------------------------------------------------------------------------- |
-| `--aspect-ratio` | `1:1`    | `1:1` `16:9` `9:16` `4:3` `3:4` `3:2` `2:3` `2:1` `1:2` `19.5:9` `9:19.5` `20:9` `9:20` |
-| `--resolution`   | `2k`     | `1k` `2k`                                                                               |
-| `--quality`      | `medium` | `low` `medium`                                                                          |
+| 腳本名稱                                 | 模型 ID                                               | 每張價格                   | 專屬參數                                                                                        |
+| ---------------------------------------- | ----------------------------------------------------- | -------------------------- | ----------------------------------------------------------------------------------------------- |
+| `cosmos-3-super-text-to-image`           | `nvidia/cosmos-3-super/text-to-image`                 | $0.040                     | `--negative-prompt` `--size` `--num-inference-steps` `--guidance-scale` `--output-format`       |
+| `flux-2-dev-text-to-image`               | `wavespeed-ai/flux-2-dev/text-to-image`               | $0.012                     | `--size` `--seed`                                                                               |
+| `flux-2-flash-text-to-image`             | `wavespeed-ai/flux-2-flash/text-to-image`             | $0.008                     | `--size` `--seed`                                                                               |
+| `flux-2-flex-text-to-image`              | `wavespeed-ai/flux-2-flex/text-to-image`              | $0.060                     | `--size` `--seed`                                                                               |
+| `flux-2-klein-9b-text-to-image`          | `wavespeed-ai/flux-2-klein-9b/text-to-image`          | $0.010                     | `--size` `--seed`                                                                               |
+| `flux-2-klein-base-9b-text-to-image`     | `wavespeed-ai/flux-2-klein-base-9b/text-to-image`     | $0.015                     | `--size` `--seed`                                                                               |
+| `flux-2-max-text-to-image`               | `wavespeed-ai/flux-2-max/text-to-image`               | $0.070                     | `--size` `--seed`                                                                               |
+| `flux-2-turbo-text-to-image`             | `wavespeed-ai/flux-2-turbo/text-to-image`             | $0.010                     | `--size` `--seed`                                                                               |
+| `flux-dev-ultra-fast`                    | `wavespeed-ai/flux-dev-ultra-fast`                    | $0.005（$0.005 ～ $0.020） | `--size` `--num-inference-steps` `--seed` `--guidance-scale` `--num-images` `--output-format`   |
+| `flux-dev`                               | `wavespeed-ai/flux-dev`                               | $0.012（$0.012 ～ $0.048） | `--size` `--num-inference-steps` `--seed` `--guidance-scale` `--num-images` `--output-format`   |
+| `glm-image-text-to-image`                | `z-ai/glm-image/text-to-image`                        | $0.120                     | `--size` `--seed` `--output-format`                                                             |
+| `gpt-image-2-text-to-image`              | `openai/gpt-image-2/text-to-image`                    | $0.060（$0.010 ～ $0.220） | `--aspect-ratio` `--resolution` `--quality` `--output-format`                                   |
+| `gpt-image-2.5-flare-text-to-image`      | `openai/gpt-image-2.5-flare/text-to-image`            | $0.024（$0.010 ～ $0.360） | `--aspect-ratio` `--resolution` `--quality` `--output-format`                                   |
+| `gpt-image-2.5-sunburst-text-to-image`   | `openai/gpt-image-2.5-sunburst/text-to-image`         | $0.024（$0.010 ～ $0.360） | `--aspect-ratio` `--resolution` `--quality` `--output-format`                                   |
+| `grok-imagine-image-v2.0-text-to-image`  | `x-ai/grok-imagine-image-v2.0/text-to-image`          | $0.050                     | `--aspect-ratio` `--resolution` `--quality`                                                     |
+| `hunyuan-image-3-instruct-text-to-image` | `wavespeed-ai/hunyuan-image-3-instruct/text-to-image` | $0.120                     | `--size` `--seed`                                                                               |
+| `ideogram-v4`                            | `ideogram-ai/ideogram-v4`                             | $0.050（$0.025 ～ $0.100） | `--resolution` `--aspect-ratio` `--quality` `--output-format`                                   |
+| `kling-image-v3-text-to-image`           | `kwaivgi/kling-image-v3/text-to-image`                | $0.028（$0.028 ～ $0.252） | `--aspect-ratio` `--resolution` `--num-images` `--output-format`                                |
+| `krea-v2-large-text-to-image`            | `wavespeed-ai/krea-v2-large/text-to-image`            | $0.060                     | `--aspect-ratio` `--creativity`                                                                 |
+| `krea-v2-medium-text-to-image`           | `wavespeed-ai/krea-v2-medium/text-to-image`           | $0.030                     | `--aspect-ratio` `--output-format`                                                              |
+| `krea-v2-medium-turbo-text-to-image`     | `wavespeed-ai/krea-v2-medium-turbo/text-to-image`     | $0.015                     | `--aspect-ratio` `--creativity`                                                                 |
+| `krea-v2-turbo`                          | `wavespeed-ai/krea-v2/turbo`                          | $0.012（$0.012 ～ $0.024） | `--aspect-ratio` `--resolution` `--seed`                                                        |
+| `midjourney-text-to-image`               | `midjourney/text-to-image`                            | $0.100（$0.100 ～ $0.150） | `--aspect-ratio` `--hd` `--quality` `--stylize` `--chaos` `--weird` `--seed`                    |
+| `minimax-h3-text-to-image`               | `wavespeed-ai/minimax-h3/text-to-image`               | $0.020（$0.020 ～ $0.060） | `--aspect-ratio` `--resolution` `--output-format` `--seed`                                      |
+| `nano-banana-2-lite-text-to-image`       | `google/nano-banana-2-lite/text-to-image`             | $0.040                     | `--aspect-ratio` `--output-format`                                                              |
+| `nano-banana-2-text-to-image-fast`       | `google/nano-banana-2/text-to-image-fast`             | $0.045（$0.045 ～ $0.050） | `--aspect-ratio` `--resolution` `--enable-web-search` `--output-format`                         |
+| `nano-banana-2-text-to-image`            | `google/nano-banana-2/text-to-image`                  | $0.070（$0.045 ～ $0.140） | `--aspect-ratio` `--resolution` `--enable-web-search` `--enable-image-search` `--output-format` |
+| `nano-banana-pro-text-to-image-ultra`    | `google/nano-banana-pro/text-to-image-ultra`          | $0.150（$0.150 ～ $0.180） | `--aspect-ratio` `--resolution` `--output-format`                                               |
+| `nano-banana-pro-text-to-image`          | `google/nano-banana-pro/text-to-image`                | $0.140（$0.140 ～ $0.240） | `--aspect-ratio` `--resolution` `--output-format`                                               |
+| `qwen-image-2.0-pro-text-to-image`       | `wavespeed-ai/qwen-image-2.0-pro/text-to-image`       | $0.070                     | `--size` `--seed`                                                                               |
+| `qwen-image-2.0-text-to-image`           | `wavespeed-ai/qwen-image-2.0/text-to-image`           | $0.030                     | `--size` `--seed`                                                                               |
+| `qwen-image-3.0-pro-text-to-image`       | `alibaba/qwen-image-3.0-pro/text-to-image`            | $0.040（$0.040 ～ $0.075） | `--aspect-ratio` `--resolution` `--enable-prompt-expansion` `--seed`                            |
+| `qwen-image-3.0-text-to-image`           | `alibaba/qwen-image-3.0/text-to-image`                | $0.030                     | `--aspect-ratio` `--resolution` `--enable-prompt-expansion` `--seed`                            |
+| `qwen-image-text-to-image-2512`          | `wavespeed-ai/qwen-image/text-to-image-2512`          | $0.020                     | `--size` `--seed` `--output-format`                                                             |
+| `qwen-image-text-to-image`               | `wavespeed-ai/qwen-image/text-to-image`               | $0.020                     | `--size` `--seed` `--output-format`                                                             |
+| `seedream-v4.5`                          | `bytedance/seedream-v4.5`                             | $0.040                     | `--size`                                                                                        |
+| `seedream-v4`                            | `bytedance/seedream-v4`                               | $0.027                     | `--size`                                                                                        |
+| `seedream-v5.0-lite`                     | `bytedance/seedream-v5.0-lite`                        | $0.035                     | `--size` `--output-format`                                                                      |
+| `seedream-v5.0-pro`                      | `bytedance/seedream-v5.0-pro`                         | $0.045（$0.045 ～ $0.090） | `--aspect-ratio` `--resolution` `--output-format` `--prompt-optimization-mode`                  |
+| `wan-2.5-text-to-image`                  | `alibaba/wan-2.5/text-to-image`                       | $0.030                     | `--negative-prompt` `--size` `--enable-prompt-expansion` `--seed`                               |
+| `wan-2.6-text-to-image`                  | `alibaba/wan-2.6/text-to-image`                       | $0.030                     | `--size` `--enable-prompt-expansion` `--seed`                                                   |
+| `wan-2.7-text-to-image-pro`              | `alibaba/wan-2.7/text-to-image-pro`                   | $0.075                     | `--size` `--thinking-mode` `--seed`                                                             |
+| `wan-2.7-text-to-image`                  | `alibaba/wan-2.7/text-to-image`                       | $0.030                     | `--size` `--thinking-mode` `--seed`                                                             |
+| `z-image-base`                           | `wavespeed-ai/z-image/base`                           | $0.010                     | `--size` `--seed` `--output-format`                                                             |
+| `z-image-turbo`                          | `wavespeed-ai/z-image/turbo`                          | $0.005                     | `--size` `--seed` `--output-format`                                                             |
 
-`seedream-v4`（每張 $0.027）：
-
-| 參數     | 預設值      | 說明                                                               |
-| -------- | ----------- | ------------------------------------------------------------------ |
-| `--size` | `2048*2048` | 格式 `寬x高` 或 `寬*高`，單邊 512 到 8192；後者在 shell 中需加引號 |
-
-`seedream-v4.5`（每張 $0.04）：
-
-| 參數     | 預設值      | 說明                                                               |
-| -------- | ----------- | ------------------------------------------------------------------ |
-| `--size` | `2048*2048` | 格式 `寬x高` 或 `寬*高`，單邊 512 到 8192；後者在 shell 中需加引號 |
-
-`seedream-v5.0-lite`（每張 $0.035）：
-
-| 參數              | 預設值      | 說明                                                                                                                                |
-| ----------------- | ----------- | ----------------------------------------------------------------------------------------------------------------------------------- |
-| `--size`          | `2048*2048` | 格式 `寬x高` 或 `寬*高`，單邊 1440 到 8192，總像素 2560×1440 到 4096×4096，過小時 API 會靜默放大並照常扣費；後者在 shell 中需加引號 |
-| `--output-format` | 無          | `jpeg` `png`，未指定時由 API 決定                                                                                                   |
-
-`seedream-v5.0-pro`（`1k` 與 `1.5k` 每張 $0.045，`2k` 每張 $0.09）：
-
-| 參數                         | 預設值     | 可選值                                                                                        |
-| ---------------------------- | ---------- | --------------------------------------------------------------------------------------------- |
-| `--aspect-ratio`             | `1:1`      | `1:1` `1:2` `2:1` `1:3` `3:1` `2:3` `3:2` `3:4` `4:3` `4:5` `5:4` `9:16` `16:9` `9:21` `21:9` |
-| `--resolution`               | `1k`       | `1k` `1.5k` `2k`                                                                              |
-| `--output-format`            | `jpeg`     | `jpeg` `png`                                                                                  |
-| `--prompt-optimization-mode` | `standard` | `standard` `fast`，後者較快但對長提示詞的遵循度較低                                           |
+`--size` 一律接受 `寬x高` 與 `寬*高` 兩種寫法，前者在 shell 中不需加引號。
+各模型的單邊、總像素與長寬比上限不同，超出範圍時在送出請求前就會被擋下，不會扣費。
+這道本機檢核是必要的：部分模型（例如 `seedream-v5.0-lite`）收到過小的尺寸不會回報錯誤，而是靜默改用其他尺寸並照常扣費。
 
 ### 輸出與補救
 
@@ -82,12 +103,13 @@
 
 ## 目錄結構
 
-| 路徑                          | 內容                                                    |
-| ----------------------------- | ------------------------------------------------------- |
-| `wsgen`                       | 共用入口腳本                                            |
-| `scripts/wavespeed_common.py` | 共用邏輯：金鑰載入、提示詞讀取、提交、輪詢、下載        |
-| `scripts/<模型名稱>.py`       | 各模型腳本，只定義模型 ID、專屬參數與 payload           |
-| `prompts/`                    | 提示詞檔                                                |
-| `output/`                     | 預設輸出目錄，圖片副檔名已在 `.gitignore` 排除          |
-| `documents/`                  | 從 WaveSpeed 下載的官方 API 文件、原始 HTML 與 llms.txt |
-| `sdk/sample/`                 | 官方模型頁 Quick start 的 cURL、Node.js、Python 範例    |
+| 路徑                          | 內容                                                                    |
+| ----------------------------- | ----------------------------------------------------------------------- |
+| `wsgen`                       | 共用入口腳本                                                            |
+| `scripts/wavespeed_common.py` | 共用邏輯：金鑰載入、提示詞讀取、提交、輪詢、下載                        |
+| `scripts/<模型名稱>.py`       | 各模型腳本，只定義模型 ID、專屬參數與 payload                           |
+| `prompts/`                    | 提示詞檔                                                                |
+| `output/`                     | 預設輸出目錄，圖片副檔名已在 `.gitignore` 排除                          |
+| `documents/`                  | 官方 API 文件、原始 HTML 與 llms.txt；`price.md` 為 45 個模型的價格總表 |
+| `.claude/plans/`              | 調查與規劃文件，含價格調查方法與測試成本估算                            |
+| `sdk/sample/`                 | 官方模型頁 Quick start 的 cURL、Node.js、Python 範例                    |
