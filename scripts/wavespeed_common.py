@@ -23,6 +23,7 @@ RESULT_URL = API_BASE + "/predictions/{id}/result"
 TERMINAL_FAILURES = {"failed", "cancelled", "timeout", "deleted"}
 REQUEST_TIMEOUT = 30.0
 COMMENT_PREFIXES = ("#", "//")
+TASK_SLUGS = {"text-to-image", "image-to-image", "text-to-video", "image-to-video", "edit"}
 
 PROJECT_ROOT = Path(__file__).resolve().parent.parent
 DEFAULT_PROMPT_FILE = PROJECT_ROOT / "prompts" / "default.txt"
@@ -33,8 +34,13 @@ BuildPayload = Callable[[argparse.Namespace, str], dict]
 
 
 def output_slug(model_id: str) -> str:
-    """去掉供應商前綴後，以連字號串接模型路徑，作為預設輸出子目錄名稱"""
-    return model_id.split("/", 1)[1].replace("/", "-")
+    """去掉供應商前綴後，以連字號串接模型路徑，作為預設輸出子目錄名稱
+
+    少數模型 ID 去掉前綴後只剩任務類別（例如 midjourney/text-to-image），此時保留供應商才能辨識模型。
+    """
+    provider, _, rest = model_id.partition("/")
+    slug = rest.replace("/", "-")
+    return f"{provider}-{slug}" if slug in TASK_SLUGS else slug
 
 
 def load_dotenv(path: Path) -> None:
@@ -52,6 +58,55 @@ def load_dotenv(path: Path) -> None:
             value = value[1:-1]
         if key and key not in os.environ:
             os.environ[key] = value
+
+
+def size_type(
+    side_min: int = 1,
+    side_max: int | None = None,
+    pixels_min: int | None = None,
+    pixels_max: int | None = None,
+    ratio_max: float | None = None,
+) -> Callable[[str], str]:
+    """產生 --size 的 argparse 型別函式：接受 寬x高 或 寬*高，回傳 API 要求的 寬*高
+
+    收 寬x高 是為了在 shell 中不必為 * 加引號；各項上下限由呼叫端依該模型的 Input Schema 指定。
+    尺寸不合規時部分模型不會拒絕，而是靜默改用其他尺寸並照常扣費，因此一律在本機先擋下。
+    """
+
+    def parse(value: str) -> str:
+        width, separator, height = value.lower().replace("*", "x").partition("x")
+        if not separator or not width.isdigit() or not height.isdigit():
+            raise argparse.ArgumentTypeError(f"格式須為 寬x高，例如 1024x1024，收到：{value}")
+        width, height = int(width), int(height)
+        for side in (width, height):
+            if side < side_min or (side_max is not None and side > side_max):
+                limit = f"介於 {side_min} 到 {side_max}" if side_max is not None else f"至少 {side_min}"
+                raise argparse.ArgumentTypeError(f"寬與高須{limit}，收到：{value}")
+        pixels = width * height
+        if (pixels_min is not None and pixels < pixels_min) or (pixels_max is not None and pixels > pixels_max):
+            raise argparse.ArgumentTypeError(
+                f"總像素須介於 {pixels_min} 到 {pixels_max}，收到：{value}（{pixels}）"
+            )
+        if ratio_max is not None and not 1 / ratio_max <= width / height <= ratio_max:
+            raise argparse.ArgumentTypeError(f"長寬比須介於 1:{ratio_max:g} 到 {ratio_max:g}:1，收到：{value}")
+        return f"{width}*{height}"
+
+    return parse
+
+
+def number_type(minimum: float, maximum: float, integer: bool = True) -> Callable[[str], int | float]:
+    """產生數值範圍檢查的 argparse 型別函式，範圍取自該模型的 Input Schema"""
+
+    def parse(value: str) -> int | float:
+        try:
+            number = int(value) if integer else float(value)
+        except ValueError:
+            raise argparse.ArgumentTypeError(f"須為{'整數' if integer else '數值'}，收到：{value}") from None
+        if not minimum <= number <= maximum:
+            raise argparse.ArgumentTypeError(f"須介於 {minimum:g} 到 {maximum:g}，收到：{value}")
+        return number
+
+    return parse
 
 
 def build_parser(model_id: str, add_model_args: AddModelArgs) -> argparse.ArgumentParser:

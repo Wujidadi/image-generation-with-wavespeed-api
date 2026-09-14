@@ -34,11 +34,16 @@ def usage(error: str | None = None) -> None:
     sys.exit(2 if error else 0)
 
 
-def normalize(model: str) -> str:
-    """接受腳本名、含 .py 的檔名，或 供應商/模型路徑 形式的模型 ID"""
-    if "/" in model:
-        model = model.split("/", 1)[1].replace("/", "-")
-    return model.removesuffix(".py")
+def candidates(model: str) -> list[str]:
+    """接受腳本名、含 .py 的檔名，或 供應商/模型路徑 形式的模型 ID，回傳可能的腳本名
+
+    模型 ID 去掉供應商前綴後可能只剩任務類別（例如 midjourney/text-to-image），
+    因此保留供應商的形式也要一併嘗試。
+    """
+    model = model.removesuffix(".py")
+    if "/" not in model:
+        return [model]
+    return [model.split("/", 1)[1].replace("/", "-"), model.replace("/", "-")]
 
 
 def split_args(argv: list[str]) -> tuple[str | None, list[str]]:
@@ -74,9 +79,10 @@ def main() -> None:
         if not argv or "-h" in argv or "--help" in argv:
             usage()
         usage("請以 -m/--model 指定模型")
-    script = SCRIPTS_DIR / f"{normalize(model)}.py"
-    if not script.is_file():
-        usage(f"找不到模型 {model!r} 對應的腳本：{script}")
+    names = candidates(model)
+    script = next((path for name in names if (path := SCRIPTS_DIR / f"{name}.py").is_file()), None)
+    if script is None:
+        usage(f"找不到模型 {model!r} 對應的腳本：{SCRIPTS_DIR / f'{names[0]}.py'}")
     os.execv(sys.executable, [sys.executable, str(script), *rest])
 
 

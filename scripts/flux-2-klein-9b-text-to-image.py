@@ -1,0 +1,36 @@
+#!/usr/bin/env python3
+"""以 WaveSpeed API 呼叫 wavespeed-ai/flux-2-klein-9b/text-to-image 進行文生圖。
+
+用法範例（於專案根目錄執行）：
+    python3 scripts/flux-2-klein-9b-text-to-image.py
+    python3 scripts/flux-2-klein-9b-text-to-image.py -p prompts/xxx.txt -o output/xxx --size 1280x720 --seed 42
+    python3 scripts/flux-2-klein-9b-text-to-image.py --prompt "A cinematic shot of a city at sunset"
+    python3 scripts/flux-2-klein-9b-text-to-image.py --task-id <任務 ID> -o output/xxx
+"""
+
+import argparse
+
+import wavespeed_common as ws
+
+MODEL_ID = "wavespeed-ai/flux-2-klein-9b/text-to-image"
+
+
+def add_model_args(parser: argparse.ArgumentParser) -> None:
+    parser.add_argument(
+        "--size", type=ws.size_type(), default="1024*1024",
+        help="輸出尺寸，格式 寬x高（在 shell 中比 寬*高 安全，後者需加引號）",
+    )
+    parser.add_argument("--seed", type=int, default=None, help="隨機種子，未指定時由 API 隨機決定")
+
+
+def build_payload(args: argparse.Namespace, prompt: str) -> dict:
+    payload = {
+        "size": args.size,
+    }
+    if args.seed is not None:
+        payload["seed"] = args.seed
+    return payload
+
+
+if __name__ == "__main__":
+    ws.run(MODEL_ID, add_model_args, build_payload)
