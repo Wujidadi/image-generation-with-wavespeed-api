@@ -2,7 +2,7 @@
 sources:
   - "GET https://api.wavespeed.ai/api/v3/models（模型目錄，含 base_price 與 Input Schema）"
   - "POST https://api.wavespeed.ai/api/v3/model/price（逐項報價，呼叫本端點不扣費）"
-retrieved: 2026-09-14T15:01:18+08:00
+retrieved: 2026-09-15T17:55:32+08:00
 ---
 
 # WaveSpeed 文生圖模型價格總表
@@ -39,6 +39,7 @@ retrieved: 2026-09-14T15:01:18+08:00
 | `bytedance/seedream-v4.5`                             | $0.040   | 固定             | 無                  | 無       |
 | `google/nano-banana-2-lite/text-to-image`             | $0.040   | 固定             | 無                  | 無       |
 | `nvidia/cosmos-3-super/text-to-image`                 | $0.040   | 固定             | 無                  | 無       |
+| `wavespeed-ai/flux-2-turbo/text-to-image`             | $0.040   | 固定             | 無                  | 無       |
 | `bytedance/seedream-v5.0-lite`                        | $0.035   | 固定             | 無                  | 無       |
 | `alibaba/qwen-image-3.0/text-to-image`                | $0.030   | 固定             | 無                  | 無       |
 | `alibaba/wan-2.5/text-to-image`                       | $0.030   | 固定             | 無                  | 無       |
@@ -48,6 +49,7 @@ retrieved: 2026-09-14T15:01:18+08:00
 | `wavespeed-ai/qwen-image-2.0/text-to-image`           | $0.030   | 固定             | 無                  | 無       |
 | `kwaivgi/kling-image-v3/text-to-image`                | $0.028   | $0.028 ～ $0.252 | num_images          | 無       |
 | `bytedance/seedream-v4`                               | $0.027   | 固定             | 無                  | 無       |
+| `wavespeed-ai/flux-2-flash/text-to-image`             | $0.025   | 固定             | 無                  | 無       |
 | `openai/gpt-image-2.5-flare/text-to-image`            | $0.024   | $0.010 ～ $0.360 | quality、resolution | 無       |
 | `openai/gpt-image-2.5-sunburst/text-to-image`         | $0.024   | $0.010 ～ $0.360 | quality、resolution | 無       |
 | `wavespeed-ai/minimax-h3/text-to-image`               | $0.020   | $0.020 ～ $0.060 | resolution          | 無       |
@@ -59,9 +61,7 @@ retrieved: 2026-09-14T15:01:18+08:00
 | `wavespeed-ai/flux-dev`                               | $0.012   | $0.012 ～ $0.048 | num_images          | 無       |
 | `wavespeed-ai/krea-v2/turbo`                          | $0.012   | $0.012 ～ $0.024 | resolution          | 無       |
 | `wavespeed-ai/flux-2-klein-9b/text-to-image`          | $0.010   | 固定             | 無                  | 無       |
-| `wavespeed-ai/flux-2-turbo/text-to-image`             | $0.010   | 固定             | 無                  | 無       |
 | `wavespeed-ai/z-image/base`                           | $0.010   | 固定             | 無                  | 無       |
-| `wavespeed-ai/flux-2-flash/text-to-image`             | $0.008   | 固定             | 無                  | 無       |
 | `wavespeed-ai/flux-dev-ultra-fast`                    | $0.005   | $0.005 ～ $0.020 | num_images          | 無       |
 | `wavespeed-ai/z-image/turbo`                          | $0.005   | 固定             | 無                  | 無       |
 
