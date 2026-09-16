@@ -175,6 +175,14 @@ def request_json(url: str, headers: dict, payload: dict | None = None, retry: bo
         sys.exit(f"連線失敗 {url}：{error}")
 
 
+def format_inference_time(result: dict) -> str | None:
+    """把官方回報的 timings.inference 格式化；缺欄位或非數值時回傳 None"""
+    inference_ms = (result.get("timings") or {}).get("inference")
+    if not isinstance(inference_ms, (int, float)):
+        return None
+    return f"推論耗時：{inference_ms:.0f} 毫秒（{inference_ms / 1000:.1f} 秒）"
+
+
 def wait_for_result(prediction_id: str, headers: dict, interval: float, timeout: float) -> dict:
     result_url = RESULT_URL.format(id=prediction_id)
     deadline = time.monotonic() + timeout
@@ -194,9 +202,15 @@ def wait_for_result(prediction_id: str, headers: dict, interval: float, timeout:
         if status == "completed":
             return result
         if status in TERMINAL_FAILURES:
-            sys.exit(f"任務結束於狀態 {status}：\n{json.dumps(result, ensure_ascii=False, indent=4)}")
+            timing = format_inference_time(result)
+            detail = json.dumps(result, ensure_ascii=False, indent=4)
+            sys.exit(f"任務結束於狀態 {status}：\n{detail}" + (f"\n{timing}" if timing else ""))
         if time.monotonic() >= deadline:
-            sys.exit(f"等待逾時（{timeout:g} 秒），任務仍處於 {status}，可稍後以 --task-id {prediction_id} 重新取回結果")
+            timing = format_inference_time(result)
+            sys.exit(
+                f"等待逾時（{timeout:g} 秒），任務仍處於 {status}，可稍後以 --task-id {prediction_id} 重新取回結果"
+                + (f"\n{timing}" if timing else "")
+            )
         print(f"  {attempt}: 狀態 {status}，{interval:g} 秒後重試…", file=sys.stderr)
         time.sleep(interval)
 
@@ -266,12 +280,12 @@ def run(model_id: str, add_model_args: AddModelArgs, build_payload: BuildPayload
         print(f"任務 ID：{prediction_id}")
 
     result = wait_for_result(prediction_id, headers, args.poll_interval, args.timeout)
+    timing = format_inference_time(result)
+    if timing:
+        print(timing)
     outputs = result.get("outputs") or []
     if not outputs:
         sys.exit("任務完成但沒有任何輸出")
-    inference_ms = (result.get("timings") or {}).get("inference")
-    if inference_ms is not None:
-        print(f"推論耗時：{inference_ms / 1000:.1f} 秒")
 
     stamp = task_stamp(result.get("created_at"))
     for index, output in enumerate(outputs, start=1):
