@@ -101,6 +101,26 @@
 - 任務提交後以任務 ID 輪詢結果。輪詢階段遇到連線中斷或伺服器 5xx 會自動重試，直到 `--timeout`。
 - 若仍失敗，任務通常已在雲端完成，改用 `--task-id <任務 ID>` 即可重新取回，不會再次扣費。
 
+## 與官方 CLI 的關係
+
+WaveSpeed 官方提供 Node.js 撰寫的 CLI（`npm install -g @wavespeed/cli`，指令為 `wavespeed`），生成圖片的主要流程不使用官方 CLI：
+
+- 官方 CLI 需要 Node 18 以上與 99 個 npm 套件，本專案只用 Python 標準函式庫。
+- 官方 CLI 與 `scripts/wavespeed_common.py` 呼叫的是同一組 REST 端點，包一層子行程只會多一個故障點。
+- 官方 CLI 的參數錯誤要送到伺服器才被擋下；本專案在送出請求之前，就在本機完成尺寸、數值範圍與可選值的檢核。
+- 官方 CLI 的 Input Schema 不含 `size` 的單邊、總像素與長寬比上下限，也會開放本專案刻意排除的圖生圖參數。
+- 提示詞檔的註解過濾、依模型名稱推算的輸出目錄、中文錯誤訊息，官方 CLI 都沒有對應功能。
+
+官方 CLI 仍用於主要流程以外的輔助工作：
+
+- 瀏覽模型目錄，找出尚未撰寫腳本的模型：`wavespeed models -t text-to-image`
+- 臨時試用尚未撰寫腳本的模型：`wavespeed run <模型 ID> -p "提示詞" --download`
+- 查詢模型的 Input Schema：`wavespeed schema <模型 ID>`
+- 不扣費報價：`wavespeed price <模型 ID> -p test`
+- 查帳：`wavespeed balance`、`wavespeed history`、`wavespeed billings`、`wavespeed usage`
+
+官方 CLI 會讀取環境變數 `WAVESPEED_API_KEY`，與本專案的 `.env` 共用同一把金鑰，不需另外執行 `wavespeed login`。
+
 ## 目錄結構
 
 | 路徑                          | 內容                                                                    |
