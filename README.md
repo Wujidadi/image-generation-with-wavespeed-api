@@ -114,13 +114,27 @@ WaveSpeed 官方提供 Node.js 撰寫的 CLI（`npm install -g @wavespeed/cli`�
 
 官方 CLI 仍用於主要流程以外的輔助工作：
 
-- 瀏覽模型目錄，找出尚未撰寫腳本的模型：`wavespeed models -t text-to-image`
+- 瀏覽模型目錄，找出尚未撰寫腳本的模型：`wavespeed models -t text-to-image`；要知道自上次調查以來上架了哪些模型，改用 `tools/models_snapshot.py`（見「模型目錄快照」）
 - 臨時試用尚未撰寫腳本的模型：`wavespeed run <模型 ID> -p "提示詞" --download`
 - 查詢模型的 Input Schema：`wavespeed schema <模型 ID>`
 - 不扣費報價：`wavespeed price <模型 ID> -p test`
 - 查帳：`wavespeed balance`、`wavespeed history`、`wavespeed billings`、`wavespeed usage`
 
 官方 CLI 會讀取環境變數 `WAVESPEED_API_KEY`，與本專案的 `.env` 共用同一把金鑰，不需另外執行 `wavespeed login`。
+
+## 模型目錄快照
+
+`GET /api/v3/models` 沒有上架日期欄位，要知道一段時間內新增了哪些模型，只能靠前後兩份目錄快照比對。
+`tools/models_snapshot.py` 把目錄存成 `documents/snapshots/models-<日期>.json`（不含 Input Schema），並與最新一份既有快照比對；呼叫該端點不扣費。
+
+```sh
+python3 tools/models_snapshot.py                        # 擷取今日快照並與最新一份既有快照比對
+python3 tools/models_snapshot.py --type text-to-image   # 只列文生圖模型，並標示是否已有腳本
+python3 tools/models_snapshot.py --since 2026-09-20     # 指定比對基準
+python3 tools/models_snapshot.py --diff-only            # 不呼叫 API，只比對既有快照
+```
+
+每次調查模型（新增腳本、更新價格）時先執行一次，快照隨調查結果一起提交。
 
 ## 目錄結構
 
@@ -132,5 +146,7 @@ WaveSpeed 官方提供 Node.js 撰寫的 CLI（`npm install -g @wavespeed/cli`�
 | `prompts/`                    | 提示詞檔                                                                |
 | `output/`                     | 預設輸出目錄，圖片副檔名已在 `.gitignore` 排除                          |
 | `documents/`                  | 官方 API 文件、原始 HTML 與 llms.txt；`price.md` 為 46 個模型的價格總表 |
+| `documents/snapshots/`        | 模型目錄快照，由 `tools/models_snapshot.py` 產生                        |
+| `tools/models_snapshot.py`    | 擷取模型目錄快照並與前一份比對，列出新增、下架與改價的模型              |
 | `.claude/plans/`              | 調查與規劃文件，含價格調查方法與測試成本估算                            |
 | `sdk/sample/`                 | 官方模型頁 Quick start 的 cURL、Node.js、Python 範例                    |

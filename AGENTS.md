@@ -21,6 +21,8 @@
 - 測試時以無效金鑰（`WAVESPEED_API_KEY=invalid`）驗證參數解析與 payload 組裝，或以 `--task-id` 取回既有任務，避免實際扣費。
   需要確認費用時以 `POST /api/v3/model/price` 報價，該端點不扣費；各模型的價格與計費參數整理在 `documents/price.md`。
 - 圖片輸出不進版控；`.env` 不進版控，範本放 `.env.example`。
+- 模型目錄沒有上架日期，調查新模型時先執行 `python3 tools/models_snapshot.py --type text-to-image`，
+  以 `documents/snapshots/` 內前一份快照比對出新增、下架與改價的模型，新快照隨調查結果提交。
 
 ## 官方 CLI（輔助工具）
 
