@@ -7,7 +7,7 @@ retrieved: 2026-09-15T17:55:32+08:00
 
 # WaveSpeed 文生圖模型價格總表
 
-本專案已串接的 45 個文生圖模型，單次成功呼叫、產出 1 張圖的美元金額。
+本專案已串接的 46 個文生圖模型，單次成功呼叫、產出 1 張圖的美元金額。
 依預設價格由高至低排列，同價者依模型 ID 排序。
 
 各欄位的定義：
@@ -53,6 +53,7 @@ retrieved: 2026-09-15T17:55:32+08:00
 | `openai/gpt-image-2.5-flare/text-to-image`            | $0.024   | $0.010 ～ $0.360 | quality、resolution | 無       |
 | `openai/gpt-image-2.5-sunburst/text-to-image`         | $0.024   | $0.010 ～ $0.360 | quality、resolution | 無       |
 | `wavespeed-ai/minimax-h3/text-to-image`               | $0.020   | $0.020 ～ $0.060 | resolution          | 無       |
+| `wavespeed-ai/qwen-image-2.1/text-to-image`           | $0.020   | 固定             | 無                  | 無       |
 | `wavespeed-ai/qwen-image/text-to-image-2512`          | $0.020   | 固定             | 無                  | 無       |
 | `wavespeed-ai/qwen-image/text-to-image`               | $0.020   | 固定             | 無                  | 無       |
 | `wavespeed-ai/flux-2-klein-base-9b/text-to-image`     | $0.015   | 固定             | 無                  | 無       |

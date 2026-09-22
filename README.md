@@ -38,7 +38,7 @@
 
 ### 模型專屬參數
 
-共 45 個模型。各參數的可選值與預設值以 `./wsgen -m <模型名稱> --help` 為準。
+共 46 個模型。各參數的可選值與預設值以 `./wsgen -m <模型名稱> --help` 為準。
 「每張價格」為全用預設參數時的單張定價，括號內是把計費參數拉到最低與最高檔位的範圍；
 完整的價格區間、影響計費的參數與帳戶折扣見 [模型價格總表](documents/price.md)，
 調查方法與測試成本見 [模型價格調查與測試成本](.claude/plans/model-pricing-and-test-cost.md)。
@@ -76,6 +76,7 @@
 | `nano-banana-pro-text-to-image`          | `google/nano-banana-pro/text-to-image`                | $0.140（$0.140 ～ $0.240） | `--aspect-ratio` `--resolution` `--output-format`                                               |
 | `qwen-image-2.0-pro-text-to-image`       | `wavespeed-ai/qwen-image-2.0-pro/text-to-image`       | $0.070                     | `--size` `--seed`                                                                               |
 | `qwen-image-2.0-text-to-image`           | `wavespeed-ai/qwen-image-2.0/text-to-image`           | $0.030                     | `--size` `--seed`                                                                               |
+| `qwen-image-2.1-text-to-image`           | `wavespeed-ai/qwen-image-2.1/text-to-image`           | $0.020                     | `--aspect-ratio` `--resolution` `--output-format` `--seed`                                      |
 | `qwen-image-3.0-pro-text-to-image`       | `alibaba/qwen-image-3.0-pro/text-to-image`            | $0.040（$0.040 ～ $0.075） | `--aspect-ratio` `--resolution` `--enable-prompt-expansion` `--seed`                            |
 | `qwen-image-3.0-text-to-image`           | `alibaba/qwen-image-3.0/text-to-image`                | $0.030                     | `--aspect-ratio` `--resolution` `--enable-prompt-expansion` `--seed`                            |
 | `qwen-image-text-to-image-2512`          | `wavespeed-ai/qwen-image/text-to-image-2512`          | $0.020                     | `--size` `--seed` `--output-format`                                                             |
@@ -130,6 +131,6 @@ WaveSpeed 官方提供 Node.js 撰寫的 CLI（`npm install -g @wavespeed/cli`�
 | `scripts/<模型名稱>.py`       | 各模型腳本，只定義模型 ID、專屬參數與 payload                           |
 | `prompts/`                    | 提示詞檔                                                                |
 | `output/`                     | 預設輸出目錄，圖片副檔名已在 `.gitignore` 排除                          |
-| `documents/`                  | 官方 API 文件、原始 HTML 與 llms.txt；`price.md` 為 45 個模型的價格總表 |
+| `documents/`                  | 官方 API 文件、原始 HTML 與 llms.txt；`price.md` 為 46 個模型的價格總表 |
 | `.claude/plans/`              | 調查與規劃文件，含價格調查方法與測試成本估算                            |
 | `sdk/sample/`                 | 官方模型頁 Quick start 的 cURL、Node.js、Python 範例                    |
