@@ -38,7 +38,7 @@
 
 ### 模型專屬參數
 
-共 46 個模型。各參數的可選值與預設值以 `./wsgen -m <模型名稱> --help` 為準。
+共 48 個模型。各參數的可選值與預設值以 `./wsgen -m <模型名稱> --help` 為準。
 「每張價格」為全用預設參數時的單張定價，括號內是把計費參數拉到最低與最高檔位的範圍；
 完整的價格區間、影響計費的參數與帳戶折扣見 [模型價格總表](documents/price.md)，
 調查方法與測試成本見 [模型價格調查與測試成本](.claude/plans/model-pricing-and-test-cost.md)。
@@ -60,6 +60,8 @@
 | `gpt-image-2.5-flare-text-to-image`      | `openai/gpt-image-2.5-flare/text-to-image`            | $0.024（$0.010 ～ $0.360） | `--aspect-ratio` `--resolution` `--quality` `--output-format`                                   |
 | `gpt-image-2.5-sunburst-text-to-image`   | `openai/gpt-image-2.5-sunburst/text-to-image`         | $0.024（$0.010 ～ $0.360） | `--aspect-ratio` `--resolution` `--quality` `--output-format`                                   |
 | `grok-imagine-image-v2.0-text-to-image`  | `x-ai/grok-imagine-image-v2.0/text-to-image`          | $0.050                     | `--aspect-ratio` `--resolution` `--quality`                                                     |
+| `hunyuan-image-2.1`                      | `wavespeed-ai/hunyuan-image-2.1`                      | $0.025                     | `--size` `--seed` `--output-format`                                                             |
+| `hunyuan-image-3`                        | `wavespeed-ai/hunyuan-image-3`                        | $0.100                     | `--size` `--seed`                                                                               |
 | `hunyuan-image-3-instruct-text-to-image` | `wavespeed-ai/hunyuan-image-3-instruct/text-to-image` | $0.120                     | `--size` `--seed`                                                                               |
 | `ideogram-v4`                            | `ideogram-ai/ideogram-v4`                             | $0.050（$0.025 ～ $0.100） | `--resolution` `--aspect-ratio` `--quality` `--output-format`                                   |
 | `kling-image-v3-text-to-image`           | `kwaivgi/kling-image-v3/text-to-image`                | $0.028（$0.028 ～ $0.252） | `--aspect-ratio` `--resolution` `--num-images` `--output-format`                                |
@@ -145,7 +147,7 @@ python3 tools/models_snapshot.py --diff-only            # 不呼叫 API，只比
 | `scripts/<模型名稱>.py`       | 各模型腳本，只定義模型 ID、專屬參數與 payload                           |
 | `prompts/`                    | 提示詞檔                                                                |
 | `output/`                     | 預設輸出目錄，圖片副檔名已在 `.gitignore` 排除                          |
-| `documents/`                  | 官方 API 文件、原始 HTML 與 llms.txt；`price.md` 為 46 個模型的價格總表 |
+| `documents/`                  | 官方 API 文件、原始 HTML 與 llms.txt；`price.md` 為 48 個模型的價格總表 |
 | `documents/snapshots/`        | 模型目錄快照，由 `tools/models_snapshot.py` 產生                        |
 | `tools/models_snapshot.py`    | 擷取模型目錄快照並與前一份比對，列出新增、下架與改價的模型              |
 | `.claude/plans/`              | 調查與規劃文件，含價格調查方法與測試成本估算                            |
