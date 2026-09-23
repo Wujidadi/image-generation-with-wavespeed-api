@@ -1,10 +1,10 @@
 ---
-updated: 2026-09-15T17:55:32+08:00
+updated: 2026-09-23T15:27:15+08:00
 ---
 
 # WaveSpeed 模型價格調查與測試成本
 
-46 個文生圖模型的價格明細見 [價格總表](../../documents/price.md)，本文件記錄調查方法、計費參數的行為，以及串接 40 個新模型時的測試成本。
+48 個文生圖模型的價格明細見 [價格總表](../../documents/price.md)，本文件記錄調查方法、計費參數的行為，以及串接 40 個新模型時的測試成本。
 
 ## 資料來源
 
@@ -18,27 +18,28 @@ updated: 2026-09-15T17:55:32+08:00
 
 ## 計費參數
 
-四個參數會改變價格，其餘參數不論怎麼設都不影響計費：
+六個參數會改變價格，其餘參數不論怎麼設都不影響計費：
 
-- `resolution`：解析度檔位，是最普遍的計費變數，共 12 個模型採用。
-  漲幅差異很大，`google/nano-banana-2/text-to-image-fast` 由 2K 升到 4K 只多 11％，`wavespeed-ai/minimax-h3/text-to-image` 由 1K 升到 2K 則漲為 3 倍。
+- `resolution`：解析度檔位，是最普遍的計費變數，共 13 個模型採用。
+  漲幅差異很大，`google/nano-banana-2/text-to-image-fast` 由 2K 升到 4K 只多 11％，`wavespeed-ai/minimax-h3/text-to-image` 由 1K 升到 2K 則漲為 3 倍，`wavespeed-ai/qwen-image-2.1/text-to-image` 的 1k、1.5k、2k 三檔為 $0.020、$0.040、$0.080，每升一檔加倍。
   另有 `kwaivgi/kling-image-v3/text-to-image` 與 `alibaba/qwen-image-3.0/text-to-image` 雖有 `resolution` 參數，但 1K 與 2K 實測同價。
 - `quality`：品質檔位，見於 `ideogram-ai/ideogram-v4` 與三個 OpenAI GPT Image 模型。
   兩個 GPT Image 2.5 模型的跨度最大，`low` 為 $0.010、`max` 為 $0.360，相差 36 倍。
 - `num_images`：單次產圖張數，價格與張數成正比，見於 `kwaivgi/kling-image-v3/text-to-image`（上限 9 張）與兩個 FLUX dev 模型（上限 4 張）。
 - `hd`：僅 `midjourney/text-to-image` 有，開啟後由 $0.100 升為 $0.150。
+- `enable_web_search`、`enable_image_search`：見於 `google/nano-banana-2/text-to-image`（兩者皆有）與 `google/nano-banana-2/text-to-image-fast`（僅前者），每開啟一項在該解析度檔位的價格上加 $0.014，兩項可疊加；`google/nano-banana-2/text-to-image` 以 4K 同時開啟兩項為 $0.168。
 
 實測確認不影響計費的參數：
 
 - 自由字串形式的 `size`：`wavespeed-ai/flux-2-max/text-to-image`、`z-ai/glm-image/text-to-image`、`alibaba/wan-2.7/text-to-image-pro` 等模型從 `512*512` 到 `8192*8192` 皆同價。
-- `aspect_ratio`、`num_inference_steps`、`guidance_scale`、`strength`、`creativity`、`prompt_optimization_mode`、`thinking_mode`、`enable_prompt_expansion`、`enable_web_search`、`enable_image_search`、`output_format`。
+- `aspect_ratio`、`num_inference_steps`、`guidance_scale`、`strength`、`creativity`、`prompt_optimization_mode`、`thinking_mode`、`enable_prompt_expansion`、`output_format`。
 - Midjourney 的 `quality`、`stylize`、`chaos`、`weird`：與其他模型的 `quality` 不同，Midjourney 的檔位切換不改價，只有 `hd` 改價。
 
 注意 `bytedance/seedream-v5.0-pro` 的計費參數名為 `resolution` 而非 `size`；帶 `size` 送出報價不會反映 2K 加倍，實跑時檔位仍以 `resolution` 為準。
 
 ## 帳戶折扣
 
-四個模型目前有折扣，其餘 42 個以定價計費。折扣為平台給定、隨時可能調整，不宜作為長期預算依據。
+四個模型目前有折扣，其餘 44 個以定價計費。折扣為平台給定、隨時可能調整，不宜作為長期預算依據。
 
 | 模型 ID                                | 折扣率 | 預設定價 | 預設實付 |
 | -------------------------------------- | ------ | -------- | -------- |

@@ -28,7 +28,7 @@ def add_model_args(parser: argparse.ArgumentParser) -> None:
     parser.add_argument("--resolution", choices=RESOLUTIONS, default="2k", help="輸出解析度層級，同時是計費依據")
     parser.add_argument(
         "--enable-web-search", action=argparse.BooleanOptionalAction, default=False,
-        help="是否以網頁搜尋補充即時資訊",
+        help="是否以網頁搜尋補充即時資訊，開啟後每張加收 $0.014",
     )
     parser.add_argument("--output-format", choices=OUTPUT_FORMATS, default="png", help="輸出圖片格式")
 
