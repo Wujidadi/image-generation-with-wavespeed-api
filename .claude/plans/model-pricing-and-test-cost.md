@@ -1,10 +1,10 @@
 ---
-updated: 2026-09-23T15:27:15+08:00
+updated: 2026-10-02T12:11:34+08:00
 ---
 
 # WaveSpeed 模型價格調查與測試成本
 
-48 個文生圖模型的價格明細見 [價格總表](../../documents/price.md)，本文件記錄調查方法、計費參數的行為，以及串接 40 個新模型時的測試成本。
+51 個文生圖模型的價格明細見 [價格總表](../../documents/price.md)，本文件記錄調查方法、計費參數的行為，以及串接 40 個新模型時的測試成本。
 
 ## 資料來源
 
@@ -22,8 +22,9 @@ updated: 2026-09-23T15:27:15+08:00
 
 - `resolution`：解析度檔位，是最普遍的計費變數，共 13 個模型採用。
   漲幅差異很大，`google/nano-banana-2/text-to-image-fast` 由 2K 升到 4K 只多 11％，`wavespeed-ai/minimax-h3/text-to-image` 由 1K 升到 2K 則漲為 3 倍，`wavespeed-ai/qwen-image-2.1/text-to-image` 的 1k、1.5k、2k 三檔為 $0.020、$0.040、$0.080，每升一檔加倍。
-  另有 `kwaivgi/kling-image-v3/text-to-image` 與 `alibaba/qwen-image-3.0/text-to-image` 雖有 `resolution` 參數，但 1K 與 2K 實測同價。
-- `quality`：品質檔位，見於 `ideogram-ai/ideogram-v4` 與三個 OpenAI GPT Image 模型。
+  另有 `kwaivgi/kling-image-v3/text-to-image`、`alibaba/qwen-image-3.0/text-to-image`、`ideogram-ai/ideogram-v4.5` 與 `bytedance/seedream-v5.0-flash` 雖有 `resolution` 參數，但各檔位實測同價。
+- `quality`：品質檔位，見於 `ideogram-ai/ideogram-v4`、`ideogram-ai/ideogram-v4.5` 與三個 OpenAI GPT Image 模型。
+  `ideogram-ai/ideogram-v4.5` 只以 `quality` 計價，`low`、`medium`、`high` 為 $0.030、$0.060、$0.220。
   兩個 GPT Image 2.5 模型的跨度最大，`low` 為 $0.010、`max` 為 $0.360，相差 36 倍。
 - `num_images`：單次產圖張數，價格與張數成正比，見於 `kwaivgi/kling-image-v3/text-to-image`（上限 9 張）與兩個 FLUX dev 模型（上限 4 張）。
 - `hd`：僅 `midjourney/text-to-image` 有，開啟後由 $0.100 升為 $0.150。
@@ -39,10 +40,11 @@ updated: 2026-09-23T15:27:15+08:00
 
 ## 帳戶折扣
 
-四個模型目前有折扣，其餘 44 個以定價計費。折扣為平台給定、隨時可能調整，不宜作為長期預算依據。
+五個模型目前有折扣，其餘 46 個以定價計費。折扣為平台給定、隨時可能調整，不宜作為長期預算依據。
 
 | 模型 ID                                | 折扣率 | 預設定價 | 預設實付 |
 | -------------------------------------- | ------ | -------- | -------- |
+| `bytedance/seedream-v5.0-flash`        | 90％   | $0.027   | $0.0243  |
 | `bytedance/seedream-v5.0-pro`          | 90％   | $0.045   | $0.0405  |
 | `google/nano-banana-2/text-to-image`   | 90％   | $0.070   | $0.0630  |
 | `google/nano-banana-pro/text-to-image` | 90％   | $0.140   | $0.1260  |

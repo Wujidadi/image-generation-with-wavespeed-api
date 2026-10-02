@@ -38,7 +38,7 @@
 
 ### 模型專屬參數
 
-共 48 個模型。各參數的可選值與預設值以 `./wsgen -m <模型名稱> --help` 為準。
+共 51 個模型。各參數的可選值與預設值以 `./wsgen -m <模型名稱> --help` 為準。
 「每張價格」為全用預設參數時的單張定價，括號內是把計費參數拉到最低與最高檔位的範圍；
 完整的價格區間、影響計費的參數與帳戶折扣見 [模型價格總表](documents/price.md)，
 調查方法與測試成本見 [模型價格調查與測試成本](.claude/plans/model-pricing-and-test-cost.md)。
@@ -64,6 +64,7 @@
 | `hunyuan-image-3`                        | `wavespeed-ai/hunyuan-image-3`                        | $0.100                     | `--size` `--seed`                                                                               |
 | `hunyuan-image-3-instruct-text-to-image` | `wavespeed-ai/hunyuan-image-3-instruct/text-to-image` | $0.450                     | `--size` `--seed`                                                                               |
 | `ideogram-v4`                            | `ideogram-ai/ideogram-v4`                             | $0.050（$0.025 ～ $0.100） | `--resolution` `--aspect-ratio` `--quality` `--output-format`                                   |
+| `ideogram-v4.5`                          | `ideogram-ai/ideogram-v4.5`                           | $0.060（$0.030 ～ $0.220） | `--resolution` `--aspect-ratio` `--quality` `--enable-prompt-expansion`                         |
 | `kling-image-v3-text-to-image`           | `kwaivgi/kling-image-v3/text-to-image`                | $0.028（$0.028 ～ $0.252） | `--aspect-ratio` `--resolution` `--num-images` `--output-format`                                |
 | `krea-v2-large-text-to-image`            | `wavespeed-ai/krea-v2-large/text-to-image`            | $0.060                     | `--aspect-ratio` `--creativity`                                                                 |
 | `krea-v2-medium-text-to-image`           | `wavespeed-ai/krea-v2-medium/text-to-image`           | $0.030                     | `--aspect-ratio` `--output-format`                                                              |
@@ -83,8 +84,10 @@
 | `qwen-image-3.0-text-to-image`           | `alibaba/qwen-image-3.0/text-to-image`                | $0.030                     | `--aspect-ratio` `--resolution` `--enable-prompt-expansion` `--seed`                            |
 | `qwen-image-text-to-image-2512`          | `wavespeed-ai/qwen-image/text-to-image-2512`          | $0.020                     | `--size` `--seed` `--output-format`                                                             |
 | `qwen-image-text-to-image`               | `wavespeed-ai/qwen-image/text-to-image`               | $0.020                     | `--size` `--seed` `--output-format`                                                             |
+| `recraft-v4.1-flash-text-to-image`       | `recraft-ai/recraft-v4.1-flash/text-to-image`         | $0.008                     | `--aspect-ratio`                                                                                |
 | `seedream-v4.5`                          | `bytedance/seedream-v4.5`                             | $0.040                     | `--size`                                                                                        |
 | `seedream-v4`                            | `bytedance/seedream-v4`                               | $0.027                     | `--size`                                                                                        |
+| `seedream-v5.0-flash`                    | `bytedance/seedream-v5.0-flash`                       | $0.027                     | `--aspect-ratio` `--resolution` `--output-format`                                               |
 | `seedream-v5.0-lite`                     | `bytedance/seedream-v5.0-lite`                        | $0.035                     | `--size` `--output-format`                                                                      |
 | `seedream-v5.0-pro`                      | `bytedance/seedream-v5.0-pro`                         | $0.045（$0.045 ～ $0.090） | `--aspect-ratio` `--resolution` `--output-format` `--prompt-optimization-mode`                  |
 | `wan-2.5-text-to-image`                  | `alibaba/wan-2.5/text-to-image`                       | $0.030                     | `--negative-prompt` `--size` `--enable-prompt-expansion` `--seed`                               |
@@ -147,7 +150,7 @@ python3 tools/models_snapshot.py --diff-only            # 不呼叫 API，只比
 | `scripts/<模型名稱>.py`       | 各模型腳本，只定義模型 ID、專屬參數與 payload                           |
 | `prompts/`                    | 提示詞檔                                                                |
 | `output/`                     | 預設輸出目錄，圖片副檔名已在 `.gitignore` 排除                          |
-| `documents/`                  | 官方 API 文件、原始 HTML 與 llms.txt；`price.md` 為 48 個模型的價格總表 |
+| `documents/`                  | 官方 API 文件、原始 HTML 與 llms.txt；`price.md` 為 51 個模型的價格總表 |
 | `documents/snapshots/`        | 模型目錄快照，由 `tools/models_snapshot.py` 產生                        |
 | `tools/models_snapshot.py`    | 擷取模型目錄快照並與前一份比對，列出新增、下架與改價的模型              |
 | `.claude/plans/`              | 調查與規劃文件，含價格調查方法與測試成本估算                            |

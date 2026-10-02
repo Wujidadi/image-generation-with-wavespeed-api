@@ -2,12 +2,12 @@
 sources:
   - "GET https://api.wavespeed.ai/api/v3/models（模型目錄，含 base_price 與 Input Schema）"
   - "POST https://api.wavespeed.ai/api/v3/model/price（逐項報價，呼叫本端點不扣費）"
-retrieved: 2026-09-23T15:27:15+08:00
+retrieved: 2026-10-02T12:11:34+08:00
 ---
 
 # WaveSpeed 文生圖模型價格總表
 
-本專案已串接的 48 個文生圖模型，單次成功呼叫、產出 1 張圖的美元金額。
+本專案已串接的 51 個文生圖模型，單次成功呼叫、產出 1 張圖的美元金額。
 依預設價格由高至低排列，同價者依模型 ID 排序。
 
 各欄位的定義：
@@ -29,6 +29,7 @@ retrieved: 2026-09-23T15:27:15+08:00
 | `google/nano-banana-2/text-to-image`                  | $0.070   | $0.045 ～ $0.168 | enable_image_search、enable_web_search、resolution | 90％     |
 | `wavespeed-ai/flux-2-max/text-to-image`               | $0.070   | 固定             | 無                                                 | 無       |
 | `wavespeed-ai/qwen-image-2.0-pro/text-to-image`       | $0.070   | 固定             | 無                                                 | 無       |
+| `ideogram-ai/ideogram-v4.5`                           | $0.060   | $0.030 ～ $0.220 | quality                                            | 無       |
 | `openai/gpt-image-2/text-to-image`                    | $0.060   | $0.010 ～ $0.220 | quality、resolution                                | 95％     |
 | `wavespeed-ai/flux-2-flex/text-to-image`              | $0.060   | 固定             | 無                                                 | 無       |
 | `wavespeed-ai/krea-v2-large/text-to-image`            | $0.060   | 固定             | 無                                                 | 無       |
@@ -50,6 +51,7 @@ retrieved: 2026-09-23T15:27:15+08:00
 | `wavespeed-ai/qwen-image-2.0/text-to-image`           | $0.030   | 固定             | 無                                                 | 無       |
 | `kwaivgi/kling-image-v3/text-to-image`                | $0.028   | $0.028 ～ $0.252 | num_images                                         | 無       |
 | `bytedance/seedream-v4`                               | $0.027   | 固定             | 無                                                 | 無       |
+| `bytedance/seedream-v5.0-flash`                       | $0.027   | 固定             | 無                                                 | 90％     |
 | `wavespeed-ai/flux-2-flash/text-to-image`             | $0.025   | 固定             | 無                                                 | 無       |
 | `wavespeed-ai/hunyuan-image-2.1`                      | $0.025   | 固定             | 無                                                 | 無       |
 | `openai/gpt-image-2.5-flare/text-to-image`            | $0.024   | $0.010 ～ $0.360 | quality、resolution                                | 無       |
@@ -65,6 +67,7 @@ retrieved: 2026-09-23T15:27:15+08:00
 | `wavespeed-ai/krea-v2/turbo`                          | $0.012   | $0.012 ～ $0.024 | resolution                                         | 無       |
 | `wavespeed-ai/flux-2-klein-9b/text-to-image`          | $0.010   | 固定             | 無                                                 | 無       |
 | `wavespeed-ai/z-image/base`                           | $0.010   | 固定             | 無                                                 | 無       |
+| `recraft-ai/recraft-v4.1-flash/text-to-image`         | $0.008   | 固定             | 無                                                 | 無       |
 | `wavespeed-ai/flux-dev-ultra-fast`                    | $0.005   | $0.005 ～ $0.020 | num_images                                         | 無       |
 | `wavespeed-ai/z-image/turbo`                          | $0.005   | 固定             | 無                                                 | 無       |
 
