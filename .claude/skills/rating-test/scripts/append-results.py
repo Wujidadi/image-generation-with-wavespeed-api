@@ -72,7 +72,7 @@ def build_rows(rating: str, logs: list[dict], prices: dict[str, str]) -> list[li
             row = [model_id, r["script"], price, seconds(r["ms"]), r["file"] or "", note]
         else:
             effect = "" if r["file"] else "😡"
-            note = "" if r["file"] or r["blocked"] else f"失敗：{r['error']}"
+            note = r["file"] or ("" if r["blocked"] else f"失敗：{r['error']}")
             row = [model_id, r["script"], price, seconds(r["ms"]), effect, note]
         (ok if r["file"] else bad).append(row)
     key = lambda row: float(row[3][:-1]) if row[3] != "-" else 1e9
