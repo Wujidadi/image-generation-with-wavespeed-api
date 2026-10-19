@@ -159,4 +159,5 @@ python3 tools/models_snapshot.py --diff-only            # 不呼叫 API，只比
 | `documents/snapshots/`        | 模型目錄快照，由 `tools/models_snapshot.py` 產生                        |
 | `tools/models_snapshot.py`    | 擷取模型目錄快照並與前一份比對，列出新增、下架與改價的模型              |
 | `.claude/plans/`              | 調查與規劃文件，含價格調查方法與測試成本估算                            |
+| `.claude/skills/rating-test/` | 三級（G／PG-13／R18）生圖實測技能：跑圖、產表並附加到實測紀錄           |
 | `sdk/sample/`                 | 官方模型頁 Quick start 的 cURL、Node.js、Python 範例                    |
