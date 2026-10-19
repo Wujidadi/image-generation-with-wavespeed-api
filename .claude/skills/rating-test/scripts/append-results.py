@@ -63,26 +63,26 @@ def seconds(ms: int | None) -> str:
 
 
 def build_rows(rating: str, logs: list[dict], prices: dict[str, str]) -> list[list[str]]:
-    rows = []
+    ok, bad = [], []
     for r in logs:
         model_id = r["model_id"] or model_id_of(r["script"])
         price = prices.get(model_id, "?")
         if rating == "G":
             note = "" if r["file"] else ("擋住" if r["blocked"] else f"失敗：{r['error']}")
-            rows.append([model_id, r["script"], price, seconds(r["ms"]), r["file"] or "", note])
+            row = [model_id, r["script"], price, seconds(r["ms"]), r["file"] or "", note]
         else:
             effect = "" if r["file"] else "😡"
             note = "" if r["file"] or r["blocked"] else f"失敗：{r['error']}"
-            rows.append([model_id, r["script"], price, seconds(r["ms"]), effect, r["file"] or "", note])
-    file_col = 4 if rating == "G" else 5
-    ok = [row for row in rows if row[file_col]]
-    bad = [row for row in rows if not row[file_col]]
+            row = [model_id, r["script"], price, seconds(r["ms"]), effect, note]
+        (ok if r["file"] else bad).append(row)
     key = lambda row: float(row[3][:-1]) if row[3] != "-" else 1e9
     return sorted(ok, key=key) + sorted(bad, key=key)
 
 
-def render(cols: list[str], rows: list[list[str]]) -> str:
-    lines = ["| " + " | ".join(cols) + " |", "| " + " | ".join("-" * len(c) for c in cols) + " |"]
+def render(cols: list[tuple[str, str]], rows: list[list[str]]) -> str:
+    """cols 為（欄名，對齊）；對齊取 left、right、center，與主表的分隔列一致"""
+    marks = {"left": "---", "right": "--:", "center": ":-:"}
+    lines = ["| " + " | ".join(name for name, _ in cols) + " |", "| " + " | ".join(marks[align] for _, align in cols) + " |"]
     lines += ["| " + " | ".join(row) + " |" for row in rows]
     return "\n".join(lines)
 
@@ -101,7 +101,8 @@ def main() -> None:
         if not rating_dir.is_dir():
             continue
         logs = [parse_log(p) for p in sorted(rating_dir.glob("*.log"))]
-        cols = ["模型", "腳本", "價格", "時長", "檔名", "備註"] if rating == "G" else ["模型", "腳本", "價格", "時長", "效果", "檔名", "備註"]
+        cols = [("模型", "left"), ("腳本", "left"), ("價格", "right"), ("時長", "right")]
+        cols += [("檔名", "left"), ("備註", "left")] if rating == "G" else [("效果", "center"), ("備註", "left")]
         table = render(cols, build_rows(rating, logs, prices))
         print(f"=== {rating}\n{table}\n")
         if args.print_only:
