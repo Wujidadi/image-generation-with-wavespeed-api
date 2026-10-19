@@ -2,7 +2,7 @@
 sources:
   - "GET https://api.wavespeed.ai/api/v3/models（模型目錄，含 base_price 與 Input Schema）"
   - "POST https://api.wavespeed.ai/api/v3/model/price（逐項報價，呼叫本端點不扣費）"
-retrieved: 2026-10-19T14:30:09+08:00
+retrieved: 2026-10-19T15:29:33+08:00
 ---
 
 # WaveSpeed 文生圖模型價格總表
@@ -13,7 +13,7 @@ retrieved: 2026-10-19T14:30:09+08:00
 各欄位的定義：
 
 - 預設價格：只帶 `prompt`、其餘參數全用 Input Schema 預設值時的單次定價。
-- 價格區間：把影響計費的參數分別拉到最低檔與最高檔時的定價；標為「固定」者，所有檔位實測皆同價。
+- 價格區間：把影響計費的參數全部同時拉到最低檔與最高檔時的定價，多個計費參數的加價會疊加；標為「固定」者，所有檔位實測皆同價。
 - 影響計費的參數：實測會改變報價的參數名稱，標「無」者不論參數如何設定都是同一價。
 - 帳戶折扣：報價端點回傳的 `discount_rate`，即實付佔定價的百分比；標「無」者無折扣。
 
@@ -31,11 +31,11 @@ retrieved: 2026-10-19T14:30:09+08:00
 | `wavespeed-ai/flux-2-max/text-to-image`                   | $0.070   | 固定             | 無                                                 | 無       |
 | `wavespeed-ai/qwen-image-2.0-pro/text-to-image`           | $0.070   | 固定             | 無                                                 | 無       |
 | `ideogram-ai/ideogram-v4.5`                               | $0.060   | $0.030 ～ $0.220 | quality                                            | 無       |
-| `openai/gpt-image-2/text-to-image`                        | $0.060   | $0.010 ～ $0.220 | quality、resolution                                | 95％     |
+| `openai/gpt-image-2/text-to-image`                        | $0.060   | $0.010 ～ $0.720 | quality、resolution                                | 95％     |
 | `wavespeed-ai/flux-2-flex/text-to-image`                  | $0.060   | 固定             | 無                                                 | 無       |
 | `wavespeed-ai/krea-v2-large/text-to-image`                | $0.060   | 固定             | 無                                                 | 無       |
 | `black-forest-labs/flux-3/text-to-image`                  | $0.050   | $0.050 ～ $0.650 | resolution                                         | 無       |
-| `ideogram-ai/ideogram-v4`                                 | $0.050   | $0.025 ～ $0.100 | quality、resolution                                | 無       |
+| `ideogram-ai/ideogram-v4`                                 | $0.050   | $0.025 ～ $0.200 | quality、resolution                                | 無       |
 | `bytedance/seedream-v5.0-pro`                             | $0.045   | $0.045 ～ $0.090 | resolution                                         | 90％     |
 | `google/nano-banana-2/text-to-image-fast`                 | $0.045   | $0.045 ～ $0.064 | enable_web_search、resolution                      | 無       |
 | `alibaba/qwen-image-3.0-pro/text-to-image`                | $0.040   | $0.040 ～ $0.075 | resolution                                         | 無       |
@@ -58,8 +58,8 @@ retrieved: 2026-10-19T14:30:09+08:00
 | `bytedance/seedream-v5.0-flash`                           | $0.027   | 固定             | 無                                                 | 90％     |
 | `wavespeed-ai/flux-2-flash/text-to-image`                 | $0.025   | 固定             | 無                                                 | 無       |
 | `wavespeed-ai/hunyuan-image-2.1`                          | $0.025   | 固定             | 無                                                 | 無       |
-| `openai/gpt-image-2.5-flare/text-to-image`                | $0.024   | $0.010 ～ $0.360 | quality、resolution                                | 無       |
-| `openai/gpt-image-2.5-sunburst/text-to-image`             | $0.024   | $0.010 ～ $0.360 | quality、resolution                                | 無       |
+| `openai/gpt-image-2.5-flare/text-to-image`                | $0.024   | $0.010 ～ $1.000 | quality、resolution                                | 無       |
+| `openai/gpt-image-2.5-sunburst/text-to-image`             | $0.024   | $0.010 ～ $1.000 | quality、resolution                                | 無       |
 | `wavespeed-ai/minimax-h3/text-to-image`                   | $0.020   | $0.020 ～ $0.060 | resolution                                         | 無       |
 | `wavespeed-ai/qwen-image-2.1/text-to-image`               | $0.020   | $0.020 ～ $0.080 | resolution                                         | 無       |
 | `wavespeed-ai/qwen-image/text-to-image`                   | $0.020   | 固定             | 無                                                 | 無       |

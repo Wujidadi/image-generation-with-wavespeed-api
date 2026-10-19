@@ -1,5 +1,5 @@
 ---
-updated: 2026-10-19T14:30:09+08:00
+updated: 2026-10-19T15:29:33+08:00
 ---
 
 # WaveSpeed 模型價格調查與測試成本
@@ -27,7 +27,8 @@ updated: 2026-10-19T14:30:09+08:00
 - `quality`：品質檔位，見於 `ideogram-ai/ideogram-v4`、`ideogram-ai/ideogram-v4.5`、三個 OpenAI GPT Image 模型與 `x-ai/grok-imagine-image-v2.0/text-to-image`。
   `ideogram-ai/ideogram-v4.5` 只以 `quality` 計價，`low`、`medium`、`high` 為 $0.030、$0.060、$0.220。
   Grok 的 `quality` 與 `resolution` 各升一檔加 $0.020，`low`＋1K 為 $0.040、`medium`＋2K 為 $0.080。
-  兩個 GPT Image 2.5 模型的跨度最大，`low` 為 $0.010、`max` 為 $0.360，相差 36 倍。
+  兩個 GPT Image 2.5 模型的跨度最大，`low` 為 $0.010、`max` 為 $0.360，再疊加 4K 解析度為 $1.000，相差 100 倍。
+  `quality` 與 `resolution` 的加價會相乘疊加，`openai/gpt-image-2/text-to-image` 以 `high`＋4K 為 $0.720，`ideogram-ai/ideogram-v4` 以最高品質＋最高解析度為 $0.200。
 - `num_images`：單次產圖張數，價格與張數成正比，見於 `kwaivgi/kling-image-v3/text-to-image`（上限 9 張）與兩個 FLUX dev 模型（上限 4 張）。
 - `hd`：僅 `midjourney/text-to-image` 有，開啟後由 $0.100 升為 $0.150。
 - `enable_web_search`、`enable_image_search`：見於 `google/nano-banana-2/text-to-image` 與 `google/nano-banana-2.1/text-to-image`（兩者皆有）與 `google/nano-banana-2/text-to-image-fast`（僅前者），每開啟一項在該解析度檔位的價格上加 $0.014，兩項可疊加；`google/nano-banana-2/text-to-image` 以 4K 同時開啟兩項為 $0.168。
@@ -76,7 +77,7 @@ updated: 2026-10-19T14:30:09+08:00
 | 含檔位驗證 | 預設參數各 1 張，另對 15 個有計費檔位的模型各加測 1 張非預設檔位 | 55       | $2.439   | $2.396   |
 | 全高檔位   | 每個新模型 1 張，計費參數拉到最高檔                              | 40       | $3.286   | $3.237   |
 
-單一模型最貴的一次呼叫是兩個 GPT Image 2.5 模型的 `quality=max`，各 $0.360；測試時務必維持預設的 `medium` 或降為 `low`。
+單一模型最貴的一次呼叫是兩個 GPT Image 2.5 模型的 `quality=max` 加 4K，各 $1.000；測試時務必維持預設的 `medium`、1K 或降為 `low`。
 
 ### 實測結果
 

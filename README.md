@@ -39,7 +39,7 @@
 ### 模型專屬參數
 
 共 56 個模型。各參數的可選值與預設值以 `./wsgen -m <模型名稱> --help` 為準。
-「每張價格」為全用預設參數時的單張定價，括號內是把計費參數拉到最低與最高檔位的範圍；
+「每張價格」為全用預設參數時的單張定價，括號內是把所有計費參數同時拉到最低與最高檔位的範圍；
 完整的價格區間、影響計費的參數與帳戶折扣見 [模型價格總表](documents/price.md)，
 調查方法與測試成本見 [模型價格調查與測試成本](.claude/plans/model-pricing-and-test-cost.md)。
 
@@ -59,14 +59,14 @@
 | `flux-dev-ultra-fast`                        | `wavespeed-ai/flux-dev-ultra-fast`                        | $0.005（$0.005 ～ $0.020） | `--size` `--num-inference-steps` `--seed` `--guidance-scale` `--num-images` `--output-format`   |
 | `flux-dev`                                   | `wavespeed-ai/flux-dev`                                   | $0.012（$0.012 ～ $0.048） | `--size` `--num-inference-steps` `--seed` `--guidance-scale` `--num-images` `--output-format`   |
 | `glm-image-text-to-image`                    | `z-ai/glm-image/text-to-image`                            | $0.120                     | `--size` `--seed` `--output-format`                                                             |
-| `gpt-image-2-text-to-image`                  | `openai/gpt-image-2/text-to-image`                        | $0.060（$0.010 ～ $0.220） | `--aspect-ratio` `--resolution` `--quality` `--output-format`                                   |
-| `gpt-image-2.5-flare-text-to-image`          | `openai/gpt-image-2.5-flare/text-to-image`                | $0.024（$0.010 ～ $0.360） | `--aspect-ratio` `--resolution` `--quality` `--output-format`                                   |
-| `gpt-image-2.5-sunburst-text-to-image`       | `openai/gpt-image-2.5-sunburst/text-to-image`             | $0.024（$0.010 ～ $0.360） | `--aspect-ratio` `--resolution` `--quality` `--output-format`                                   |
+| `gpt-image-2-text-to-image`                  | `openai/gpt-image-2/text-to-image`                        | $0.060（$0.010 ～ $0.720） | `--aspect-ratio` `--resolution` `--quality` `--output-format`                                   |
+| `gpt-image-2.5-flare-text-to-image`          | `openai/gpt-image-2.5-flare/text-to-image`                | $0.024（$0.010 ～ $1.000） | `--aspect-ratio` `--resolution` `--quality` `--output-format`                                   |
+| `gpt-image-2.5-sunburst-text-to-image`       | `openai/gpt-image-2.5-sunburst/text-to-image`             | $0.024（$0.010 ～ $1.000） | `--aspect-ratio` `--resolution` `--quality` `--output-format`                                   |
 | `grok-imagine-image-v2.0-text-to-image`      | `x-ai/grok-imagine-image-v2.0/text-to-image`              | $0.080（$0.040 ～ $0.080） | `--aspect-ratio` `--resolution` `--quality`                                                     |
 | `hunyuan-image-2.1`                          | `wavespeed-ai/hunyuan-image-2.1`                          | $0.025                     | `--size` `--seed` `--output-format`                                                             |
 | `hunyuan-image-3`                            | `wavespeed-ai/hunyuan-image-3`                            | $0.100                     | `--size` `--seed`                                                                               |
 | `hunyuan-image-3-instruct-text-to-image`     | `wavespeed-ai/hunyuan-image-3-instruct/text-to-image`     | $0.450                     | `--size` `--seed`                                                                               |
-| `ideogram-v4`                                | `ideogram-ai/ideogram-v4`                                 | $0.050（$0.025 ～ $0.100） | `--resolution` `--aspect-ratio` `--quality` `--output-format`                                   |
+| `ideogram-v4`                                | `ideogram-ai/ideogram-v4`                                 | $0.050（$0.025 ～ $0.200） | `--resolution` `--aspect-ratio` `--quality` `--output-format`                                   |
 | `ideogram-v4.5`                              | `ideogram-ai/ideogram-v4.5`                               | $0.060（$0.030 ～ $0.220） | `--resolution` `--aspect-ratio` `--quality` `--enable-prompt-expansion`                         |
 | `kling-image-v3-text-to-image`               | `kwaivgi/kling-image-v3/text-to-image`                    | $0.028（$0.028 ～ $0.252） | `--aspect-ratio` `--resolution` `--num-images` `--output-format`                                |
 | `krea-v2-large-text-to-image`                | `wavespeed-ai/krea-v2-large/text-to-image`                | $0.060                     | `--aspect-ratio` `--creativity`                                                                 |
