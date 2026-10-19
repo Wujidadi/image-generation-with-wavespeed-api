@@ -4,7 +4,7 @@
 用法範例（於專案根目錄執行）：
     python3 scripts/ideogram-v4.5.py
     python3 scripts/ideogram-v4.5.py -p prompts/xxx.txt -o output/xxx --quality low --resolution 2k
-    python3 scripts/ideogram-v4.5.py --prompt "A cinematic shot of a city at sunset" --no-enable-prompt-expansion
+    python3 scripts/ideogram-v4.5.py --prompt "A cinematic shot of a city at sunset" --enable-prompt-expansion
     python3 scripts/ideogram-v4.5.py --task-id <任務 ID> -o output/xxx
 """
 
@@ -26,7 +26,7 @@ def add_model_args(parser: argparse.ArgumentParser) -> None:
         help="生成品質層級，亦為計費依據（low $0.03、medium $0.06、high $0.22）",
     )
     parser.add_argument(
-        "--enable-prompt-expansion", action=argparse.BooleanOptionalAction, default=True,
+        "--enable-prompt-expansion", action=argparse.BooleanOptionalAction, default=False,
         help="生成前先由模型擴寫提示詞",
     )
 
