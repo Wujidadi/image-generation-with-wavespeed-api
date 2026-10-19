@@ -2,7 +2,7 @@
 sources:
   - "GET https://api.wavespeed.ai/api/v3/models（模型目錄，含 base_price 與 Input Schema）"
   - "POST https://api.wavespeed.ai/api/v3/model/price（逐項報價，呼叫本端點不扣費）"
-retrieved: 2026-10-02T12:11:34+08:00
+retrieved: 2026-10-19T14:22:00+08:00
 ---
 
 # WaveSpeed 文生圖模型價格總表
@@ -25,6 +25,7 @@ retrieved: 2026-10-02T12:11:34+08:00
 | `z-ai/glm-image/text-to-image`                        | $0.120   | 固定             | 無                                                 | 無       |
 | `midjourney/text-to-image`                            | $0.100   | $0.100 ～ $0.150 | hd                                                 | 無       |
 | `wavespeed-ai/hunyuan-image-3`                        | $0.100   | 固定             | 無                                                 | 無       |
+| `x-ai/grok-imagine-image-v2.0/text-to-image`          | $0.080   | $0.040 ～ $0.080 | quality、resolution                                | 無       |
 | `alibaba/wan-2.7/text-to-image-pro`                   | $0.075   | 固定             | 無                                                 | 無       |
 | `google/nano-banana-2/text-to-image`                  | $0.070   | $0.045 ～ $0.168 | enable_image_search、enable_web_search、resolution | 90％     |
 | `wavespeed-ai/flux-2-max/text-to-image`               | $0.070   | 固定             | 無                                                 | 無       |
@@ -34,7 +35,6 @@ retrieved: 2026-10-02T12:11:34+08:00
 | `wavespeed-ai/flux-2-flex/text-to-image`              | $0.060   | 固定             | 無                                                 | 無       |
 | `wavespeed-ai/krea-v2-large/text-to-image`            | $0.060   | 固定             | 無                                                 | 無       |
 | `ideogram-ai/ideogram-v4`                             | $0.050   | $0.025 ～ $0.100 | quality、resolution                                | 無       |
-| `x-ai/grok-imagine-image-v2.0/text-to-image`          | $0.050   | 固定             | 無                                                 | 無       |
 | `bytedance/seedream-v5.0-pro`                         | $0.045   | $0.045 ～ $0.090 | resolution                                         | 90％     |
 | `google/nano-banana-2/text-to-image-fast`             | $0.045   | $0.045 ～ $0.064 | enable_web_search、resolution                      | 無       |
 | `alibaba/qwen-image-3.0-pro/text-to-image`            | $0.040   | $0.040 ～ $0.075 | resolution                                         | 無       |

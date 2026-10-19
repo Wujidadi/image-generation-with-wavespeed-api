@@ -20,6 +20,7 @@
 - 錯誤一律以 `sys.exit("中文訊息")` 結束，不讓例外堆疊外洩；所有會扣費的請求之前，先完成本機端的檢查。
 - 測試時以無效金鑰（`WAVESPEED_API_KEY=invalid`）驗證參數解析與 payload 組裝，或以 `--task-id` 取回既有任務，避免實際扣費。
   需要確認費用時以 `POST /api/v3/model/price` 報價，該端點不扣費；各模型的價格與計費參數整理在 `documents/price.md`。
+  報價請求的參數要放在 `inputs` 欄位（`{"model_id": …, "inputs": {"prompt": …, "resolution": …}}`）；誤寫成 `input` 不會報錯，但所有檔位都只回傳底價。
 - 圖片輸出不進版控；`.env` 不進版控，範本放 `.env.example`。
 - 模型目錄沒有上架日期，調查新模型時先執行 `python3 tools/models_snapshot.py --type text-to-image`，
   以 `documents/snapshots/` 內前一份快照比對出新增、下架與改價的模型，新快照隨調查結果提交。

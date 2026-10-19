@@ -24,7 +24,7 @@ def add_model_args(parser: argparse.ArgumentParser) -> None:
     parser.add_argument("--aspect-ratio", choices=ASPECT_RATIOS, default="1:1", help="輸出長寬比")
     parser.add_argument("--resolution", choices=RESOLUTIONS, default="1k", help="輸出解析度層級，同時是計費依據")
     parser.add_argument(
-        "--enable-prompt-expansion", action=argparse.BooleanOptionalAction, default=True,
+        "--enable-prompt-expansion", action=argparse.BooleanOptionalAction, default=False,
         help="是否啟用提示詞智慧擴寫",
     )
     parser.add_argument("--seed", type=int, default=None, help="隨機種子，未指定時由 API 隨機決定")
