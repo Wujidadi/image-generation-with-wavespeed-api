@@ -8,6 +8,7 @@ import argparse
 import json
 import mimetypes
 import os
+import re
 import sys
 import time
 from collections.abc import Callable
@@ -24,6 +25,7 @@ TERMINAL_FAILURES = {"failed", "cancelled", "timeout", "deleted"}
 REQUEST_TIMEOUT = 30.0
 COMMENT_PREFIXES = ("#", "//")
 TASK_SLUGS = {"text-to-image", "image-to-image", "text-to-video", "image-to-video", "edit"}
+VERSION_SEGMENT = re.compile(r"v?\d+(\.\d+)*")
 
 PROJECT_ROOT = Path(__file__).resolve().parent.parent
 DEFAULT_PROMPT_FILE = PROJECT_ROOT / "prompts" / "default.txt"
@@ -36,11 +38,13 @@ BuildPayload = Callable[[argparse.Namespace, str], dict]
 def output_slug(model_id: str) -> str:
     """去掉供應商前綴後，以連字號串接模型路徑，作為預設輸出子目錄名稱
 
-    少數模型 ID 去掉前綴後只剩任務類別（例如 midjourney/text-to-image），此時保留供應商才能辨識模型。
+    少數模型 ID 去掉前綴後只剩任務類別（例如 midjourney/text-to-image）或只剩版號開頭（例如 krea/v3/text-to-image），
+    此時保留供應商才能辨識模型。
     """
     provider, _, rest = model_id.partition("/")
     slug = rest.replace("/", "-")
-    return f"{provider}-{slug}" if slug in TASK_SLUGS else slug
+    keep_provider = slug in TASK_SLUGS or VERSION_SEGMENT.fullmatch(rest.split("/", 1)[0]) is not None
+    return f"{provider}-{slug}" if keep_provider else slug
 
 
 def load_dotenv(path: Path) -> None:

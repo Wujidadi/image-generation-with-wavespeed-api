@@ -8,7 +8,7 @@
 - 各模型腳本 `scripts/<模型名稱>.py` 只做三件事：定義 `MODEL_ID`、以 `add_model_args(parser)` 加入模型專屬參數、以 `build_payload(args, prompt)` 回傳 `prompt` 以外的請求欄位，最後呼叫 `ws.run(MODEL_ID, add_model_args, build_payload)`。
 - 檔名即模型名稱，規則是模型 ID 去掉供應商前綴、斜線改連字號，例如 `x-ai/grok-imagine-image-v2.0/text-to-image` 對應 `grok-imagine-image-v2.0-text-to-image.py`。
   `wsgen --list` 與預設輸出目錄都依此規則自動推算，新增腳本不需改 `wsgen`。
-  例外是去掉前綴後只剩任務類別的模型 ID：`midjourney/text-to-image` 會保留供應商，對應 `midjourney-text-to-image.py`，判斷依據是 `wavespeed_common.TASK_SLUGS`。
+  例外是去掉前綴後只剩任務類別或以版號開頭的模型 ID：`midjourney/text-to-image` 與 `krea/v3/text-to-image` 會保留供應商，對應 `midjourney-text-to-image.py` 與 `krea-v3-text-to-image.py`，判斷依據是 `wavespeed_common.output_slug`。
 
 ## 慣例
 
