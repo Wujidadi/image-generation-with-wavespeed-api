@@ -148,16 +148,17 @@ python3 tools/models_snapshot.py --diff-only            # 不呼叫 API，只比
 
 ## 目錄結構
 
-| 路徑                          | 內容                                                                    |
-| ----------------------------- | ----------------------------------------------------------------------- |
-| `wsgen`                       | 共用入口腳本                                                            |
-| `scripts/wavespeed_common.py` | 共用邏輯：金鑰載入、提示詞讀取、提交、輪詢、下載                        |
-| `scripts/<模型名稱>.py`       | 各模型腳本，只定義模型 ID、專屬參數與 payload                           |
-| `prompts/`                    | 提示詞檔                                                                |
-| `output/`                     | 預設輸出目錄，圖片副檔名已在 `.gitignore` 排除                          |
-| `documents/`                  | 官方 API 文件、原始 HTML 與 llms.txt；`price.md` 為 56 個模型的價格總表 |
-| `documents/snapshots/`        | 模型目錄快照，由 `tools/models_snapshot.py` 產生                        |
-| `tools/models_snapshot.py`    | 擷取模型目錄快照並與前一份比對，列出新增、下架與改價的模型              |
-| `.claude/plans/`              | 調查與規劃文件，含價格調查方法與測試成本估算                            |
-| `.claude/skills/rating-test/` | 三級（G／PG-13／R18）生圖實測技能：跑圖、產表並附加到實測紀錄           |
-| `sdk/sample/`                 | 官方模型頁 Quick start 的 cURL、Node.js、Python 範例                    |
+| 路徑                           | 內容                                                                    |
+| ------------------------------ | ----------------------------------------------------------------------- |
+| `wsgen`                        | 共用入口腳本                                                            |
+| `scripts/wavespeed_common.py`  | 共用邏輯：金鑰載入、提示詞讀取、提交、輪詢、下載                        |
+| `scripts/<模型名稱>.py`        | 各模型腳本，只定義模型 ID、專屬參數與 payload                           |
+| `prompts/`                     | 提示詞檔                                                                |
+| `output/`                      | 預設輸出目錄，圖片副檔名已在 `.gitignore` 排除                          |
+| `documents/`                   | 官方 API 文件、原始 HTML 與 llms.txt；`price.md` 為 56 個模型的價格總表 |
+| `documents/snapshots/`         | 模型目錄快照，由 `tools/models_snapshot.py` 產生                        |
+| `tools/models_snapshot.py`     | 擷取模型目錄快照並與前一份比對，列出新增、下架與改價的模型              |
+| `.claude/plans/`               | 調查與規劃文件，含價格調查方法與測試成本估算                            |
+| `.claude/skills/model-survey/` | 盤點技能：目錄差異、逐檔位重新報價、腳本與 Schema 漂移檢查、文件同步    |
+| `.claude/skills/rating-test/`  | 三級（G／PG-13／R18）生圖實測技能：跑圖、產表並附加到實測紀錄           |
+| `sdk/sample/`                  | 官方模型頁 Quick start 的 cURL、Node.js、Python 範例                    |

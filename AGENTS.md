@@ -24,6 +24,7 @@
 - 圖片輸出不進版控；`.env` 不進版控，範本放 `.env.example`。
 - 模型目錄沒有上架日期，調查新模型時先執行 `python3 tools/models_snapshot.py --type text-to-image`，
   以 `documents/snapshots/` 內前一份快照比對出新增、下架與改價的模型，新快照隨調查結果提交。
+  完整盤點流程（快照、重新報價、Schema 漂移、文件同步）見 `.claude/skills/model-survey/`。
 
 ## 官方 CLI（輔助工具）
 
