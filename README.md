@@ -38,7 +38,7 @@
 
 ### 模型專屬參數
 
-共 56 個模型。各參數的可選值與預設值以 `./wsgen -m <模型名稱> --help` 為準。
+共 57 個模型。各參數的可選值與預設值以 `./wsgen -m <模型名稱> --help` 為準。
 「每張價格」為全用預設參數時的單張定價，括號內是把所有計費參數同時拉到最低與最高檔位的範圍；
 完整的價格區間、影響計費的參數與帳戶折扣見 [模型價格總表](documents/price.md)，
 調查方法與測試成本見 [模型價格調查與測試成本](.claude/plans/model-pricing-and-test-cost.md)。
@@ -76,6 +76,7 @@
 | `krea-v3-text-to-image`                      | `krea/v3/text-to-image`                                   | $0.030（$0.002 ～ $0.120） | `--negative-prompt` `--size` `--model` `--reasoning-level` `--output-format` `--seed`           |
 | `midjourney-text-to-image`                   | `midjourney/text-to-image`                                | $0.100（$0.100 ～ $0.150） | `--aspect-ratio` `--hd` `--quality` `--stylize` `--chaos` `--weird` `--seed`                    |
 | `minimax-h3-text-to-image`                   | `wavespeed-ai/minimax-h3/text-to-image`                   | $0.020（$0.020 ～ $0.060） | `--aspect-ratio` `--resolution` `--output-format` `--seed`                                      |
+| `moss-image-text-to-image`                   | `wavespeed-ai/moss-image/text-to-image`                   | $0.020（$0.020 ～ $0.080） | `--aspect-ratio` `--resolution` `--output-format` `--seed`                                      |
 | `nano-banana-2-lite-text-to-image`           | `google/nano-banana-2-lite/text-to-image`                 | $0.040                     | `--aspect-ratio` `--output-format`                                                              |
 | `nano-banana-2-text-to-image-fast`           | `google/nano-banana-2/text-to-image-fast`                 | $0.045（$0.045 ～ $0.064） | `--aspect-ratio` `--resolution` `--enable-web-search` `--output-format`                         |
 | `nano-banana-2-text-to-image`                | `google/nano-banana-2/text-to-image`                      | $0.070（$0.045 ～ $0.168） | `--aspect-ratio` `--resolution` `--enable-web-search` `--enable-image-search` `--output-format` |
@@ -155,7 +156,7 @@ python3 tools/models_snapshot.py --diff-only            # 不呼叫 API，只比
 | `scripts/<模型名稱>.py`        | 各模型腳本，只定義模型 ID、專屬參數與 payload                           |
 | `prompts/`                     | 提示詞檔                                                                |
 | `output/`                      | 預設輸出目錄，圖片副檔名已在 `.gitignore` 排除                          |
-| `documents/`                   | 官方 API 文件、原始 HTML 與 llms.txt；`price.md` 為 56 個模型的價格總表 |
+| `documents/`                   | 官方 API 文件、原始 HTML 與 llms.txt；`price.md` 為 57 個模型的價格總表 |
 | `documents/snapshots/`         | 模型目錄快照，由 `tools/models_snapshot.py` 產生                        |
 | `tools/models_snapshot.py`     | 擷取模型目錄快照並與前一份比對，列出新增、下架與改價的模型              |
 | `.claude/plans/`               | 調查與規劃文件，含價格調查方法與測試成本估算                            |

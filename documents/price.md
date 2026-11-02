@@ -2,12 +2,12 @@
 sources:
   - "GET https://api.wavespeed.ai/api/v3/models（模型目錄，含 base_price 與 Input Schema）"
   - "POST https://api.wavespeed.ai/api/v3/model/price（逐項報價，呼叫本端點不扣費）"
-retrieved: 2026-11-02T17:14:16+08:00
+retrieved: 2026-11-02T17:16:48+08:00
 ---
 
 # WaveSpeed 文生圖模型價格總表
 
-本專案已串接的 56 個文生圖模型，單次成功呼叫、產出 1 張圖的美元金額。
+本專案已串接的 57 個文生圖模型，單次成功呼叫、產出 1 張圖的美元金額。
 依預設價格由高至低排列，同價者依模型 ID 排序。
 
 各欄位的定義：
@@ -61,6 +61,7 @@ retrieved: 2026-11-02T17:14:16+08:00
 | `openai/gpt-image-2.5-flare/text-to-image`                | $0.024   | $0.010 ～ $1.000 | quality、resolution                                | 無       |
 | `openai/gpt-image-2.5-sunburst/text-to-image`             | $0.024   | $0.010 ～ $1.000 | quality、resolution                                | 無       |
 | `wavespeed-ai/minimax-h3/text-to-image`                   | $0.020   | $0.020 ～ $0.060 | resolution                                         | 無       |
+| `wavespeed-ai/moss-image/text-to-image`                   | $0.020   | $0.020 ～ $0.080 | resolution                                         | 無       |
 | `wavespeed-ai/qwen-image-2.1/text-to-image`               | $0.020   | $0.020 ～ $0.080 | resolution                                         | 無       |
 | `wavespeed-ai/qwen-image/text-to-image`                   | $0.020   | 固定             | 無                                                 | 無       |
 | `wavespeed-ai/qwen-image/text-to-image-2512`              | $0.020   | 固定             | 無                                                 | 無       |
