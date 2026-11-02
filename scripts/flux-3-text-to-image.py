@@ -4,7 +4,7 @@
 用法範例（於專案根目錄執行）：
     python3 scripts/flux-3-text-to-image.py
     python3 scripts/flux-3-text-to-image.py -p prompts/xxx.txt -o output/xxx --aspect-ratio 16:9 --resolution 2k
-    python3 scripts/flux-3-text-to-image.py --prompt "A cinematic shot of a city at sunset" --enable-prompt-expansion
+    python3 scripts/flux-3-text-to-image.py --prompt "A cinematic shot of a city at sunset"
     python3 scripts/flux-3-text-to-image.py --task-id <任務 ID> -o output/xxx
 """
 
@@ -25,10 +25,6 @@ def add_model_args(parser: argparse.ArgumentParser) -> None:
         help="輸出解析度層級，同時是計費依據；4k 可能需要數分鐘",
     )
     parser.add_argument("--output-format", choices=OUTPUT_FORMATS, default="jpeg", help="輸出圖片格式")
-    parser.add_argument(
-        "--enable-prompt-expansion", action=argparse.BooleanOptionalAction, default=False,
-        help="是否在保留原意的前提下擴寫提示詞",
-    )
 
 
 def build_payload(args: argparse.Namespace, prompt: str) -> dict:
@@ -36,7 +32,6 @@ def build_payload(args: argparse.Namespace, prompt: str) -> dict:
         "aspect_ratio": args.aspect_ratio,
         "resolution": args.resolution,
         "output_format": args.output_format,
-        "enable_prompt_expansion": args.enable_prompt_expansion,
     }
 
 

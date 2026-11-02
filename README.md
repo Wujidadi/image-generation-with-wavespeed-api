@@ -45,7 +45,7 @@
 
 | 腳本名稱                                     | 模型 ID                                                   | 每張價格                   | 專屬參數                                                                                        |
 | -------------------------------------------- | --------------------------------------------------------- | -------------------------- | ----------------------------------------------------------------------------------------------- |
-| `cosmos-3-super-text-to-image`               | `nvidia/cosmos-3-super/text-to-image`                     | $0.040                     | `--negative-prompt` `--size` `--num-inference-steps` `--guidance-scale` `--output-format`       |
+| `cosmos-3-super-text-to-image`               | `nvidia/cosmos-3-super/text-to-image`                     | $0.040                     | `--size` `--output-format`                                                                      |
 | `flux-2-dev-text-to-image`                   | `wavespeed-ai/flux-2-dev/text-to-image`                   | $0.012                     | `--size` `--seed`                                                                               |
 | `flux-2-flash-text-to-image`                 | `wavespeed-ai/flux-2-flash/text-to-image`                 | $0.025                     | `--size` `--seed`                                                                               |
 | `flux-2-flex-text-to-image`                  | `wavespeed-ai/flux-2-flex/text-to-image`                  | $0.060                     | `--size` `--seed`                                                                               |
@@ -55,7 +55,7 @@
 | `flux-2-turbo-text-to-image`                 | `wavespeed-ai/flux-2-turbo/text-to-image`                 | $0.040                     | `--size` `--seed`                                                                               |
 | `flux-3-klein-image-base-text-to-image`      | `wavespeed-ai/flux-3-klein-image-base/text-to-image`      | $0.030（$0.030 ～ $0.120） | `--aspect-ratio` `--resolution` `--output-format` `--seed`                                      |
 | `flux-3-klein-image-distilled-text-to-image` | `wavespeed-ai/flux-3-klein-image-distilled/text-to-image` | $0.010（$0.010 ～ $0.040） | `--aspect-ratio` `--resolution` `--output-format` `--seed`                                      |
-| `flux-3-text-to-image`                       | `black-forest-labs/flux-3/text-to-image`                  | $0.048（$0.048 ～ $0.607） | `--aspect-ratio` `--resolution` `--output-format` `--enable-prompt-expansion`                   |
+| `flux-3-text-to-image`                       | `black-forest-labs/flux-3/text-to-image`                  | $0.048（$0.048 ～ $0.607） | `--aspect-ratio` `--resolution` `--output-format`                                               |
 | `flux-dev-ultra-fast`                        | `wavespeed-ai/flux-dev-ultra-fast`                        | $0.005（$0.005 ～ $0.020） | `--size` `--num-inference-steps` `--seed` `--guidance-scale` `--num-images` `--output-format`   |
 | `flux-dev`                                   | `wavespeed-ai/flux-dev`                                   | $0.012（$0.012 ～ $0.048） | `--size` `--num-inference-steps` `--seed` `--guidance-scale` `--num-images` `--output-format`   |
 | `glm-image-text-to-image`                    | `z-ai/glm-image/text-to-image`                            | $0.120                     | `--size` `--seed` `--output-format`                                                             |
