@@ -1,5 +1,5 @@
 ---
-updated: 2026-10-19T15:29:33+08:00
+updated: 2026-11-02T17:14:16+08:00
 ---
 
 # WaveSpeed 模型價格調查與測試成本
@@ -22,7 +22,7 @@ updated: 2026-10-19T15:29:33+08:00
 
 - `resolution`：解析度檔位，是最普遍的計費變數，共 18 個模型採用。
   漲幅差異很大，`google/nano-banana-2/text-to-image-fast` 由 2K 升到 4K 只多 11％，`wavespeed-ai/minimax-h3/text-to-image` 由 1K 升到 2K 則漲為 3 倍，`wavespeed-ai/qwen-image-2.1/text-to-image` 的 1k、1.5k、2k 三檔為 $0.020、$0.040、$0.080，每升一檔加倍。
-  `black-forest-labs/flux-3/text-to-image` 的跨度最大，1k、2k、4k 為 $0.050、$0.120、$0.650，相差 13 倍。
+  `black-forest-labs/flux-3/text-to-image` 的跨度最大，1k、2k、4k 為 $0.048、$0.100、$0.607，相差約 13 倍。
   另有 `kwaivgi/kling-image-v3/text-to-image`、`alibaba/qwen-image-3.0/text-to-image`、`ideogram-ai/ideogram-v4.5` 與 `bytedance/seedream-v5.0-flash` 雖有 `resolution` 參數，但各檔位實測同價。
 - `quality`：品質檔位，見於 `ideogram-ai/ideogram-v4`、`ideogram-ai/ideogram-v4.5`、三個 OpenAI GPT Image 模型與 `x-ai/grok-imagine-image-v2.0/text-to-image`。
   `ideogram-ai/ideogram-v4.5` 只以 `quality` 計價，`low`、`medium`、`high` 為 $0.030、$0.060、$0.220。

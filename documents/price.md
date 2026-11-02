@@ -2,7 +2,7 @@
 sources:
   - "GET https://api.wavespeed.ai/api/v3/models（模型目錄，含 base_price 與 Input Schema）"
   - "POST https://api.wavespeed.ai/api/v3/model/price（逐項報價，呼叫本端點不扣費）"
-retrieved: 2026-10-19T15:29:33+08:00
+retrieved: 2026-11-02T17:14:16+08:00
 ---
 
 # WaveSpeed 文生圖模型價格總表
@@ -34,8 +34,8 @@ retrieved: 2026-10-19T15:29:33+08:00
 | `openai/gpt-image-2/text-to-image`                        | $0.060   | $0.010 ～ $0.720 | quality、resolution                                | 95％     |
 | `wavespeed-ai/flux-2-flex/text-to-image`                  | $0.060   | 固定             | 無                                                 | 無       |
 | `wavespeed-ai/krea-v2-large/text-to-image`                | $0.060   | 固定             | 無                                                 | 無       |
-| `black-forest-labs/flux-3/text-to-image`                  | $0.050   | $0.050 ～ $0.650 | resolution                                         | 無       |
 | `ideogram-ai/ideogram-v4`                                 | $0.050   | $0.025 ～ $0.200 | quality、resolution                                | 無       |
+| `black-forest-labs/flux-3/text-to-image`                  | $0.048   | $0.048 ～ $0.607 | resolution                                         | 無       |
 | `bytedance/seedream-v5.0-pro`                             | $0.045   | $0.045 ～ $0.090 | resolution                                         | 90％     |
 | `google/nano-banana-2/text-to-image-fast`                 | $0.045   | $0.045 ～ $0.064 | enable_web_search、resolution                      | 無       |
 | `alibaba/qwen-image-3.0-pro/text-to-image`                | $0.040   | $0.040 ～ $0.075 | resolution                                         | 無       |
