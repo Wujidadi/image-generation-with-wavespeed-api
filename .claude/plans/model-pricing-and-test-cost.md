@@ -1,10 +1,11 @@
 ---
-updated: 2026-11-02T17:16:48+08:00
+updated: 2026-11-03T14:40:31+08:00
 ---
 
 # WaveSpeed 模型價格調查與測試成本
 
-57 個文生圖模型的價格明細見 [價格總表](../../documents/price.md)，本文件記錄調查方法、計費參數的行為，以及串接 40 個新模型時的測試成本。
+100 個模型的價格明細見 [價格總表](../../documents/price.md)，本文件記錄調查方法、計費參數的行為，以及串接 40 個新模型時的測試成本。
+下文的模型數與價格統計以文生圖端點為準；edit 端點與 `--image` 的計費另見「計費參數」的參考圖張數。
 
 ## 資料來源
 
@@ -18,7 +19,7 @@ updated: 2026-11-02T17:16:48+08:00
 
 ## 計費參數
 
-六個參數會改變價格，其餘參數不論怎麼設都不影響計費：
+七個參數會改變價格，其餘參數不論怎麼設都不影響計費：
 
 - `resolution`：解析度檔位，是最普遍的計費變數，共 19 個模型採用。
   漲幅差異很大，`google/nano-banana-2/text-to-image-fast` 由 2K 升到 4K 只多 11％，`wavespeed-ai/minimax-h3/text-to-image` 由 1K 升到 2K 則漲為 3 倍，`wavespeed-ai/qwen-image-2.1/text-to-image` 的 1k、1.5k、2k 三檔為 $0.020、$0.040、$0.080，每升一檔加倍。
@@ -30,6 +31,7 @@ updated: 2026-11-02T17:16:48+08:00
   兩個 GPT Image 2.5 模型的跨度最大，`low` 為 $0.010、`max` 為 $0.360，再疊加 4K 解析度為 $1.000，相差 100 倍。
   `quality` 與 `resolution` 的加價會相乘疊加，`openai/gpt-image-2/text-to-image` 以 `high`＋4K 為 $0.720，`ideogram-ai/ideogram-v4` 以最高品質＋最高解析度為 $0.200。
 - `num_images`：單次產圖張數，價格與張數成正比，見於 `kwaivgi/kling-image-v3/text-to-image`（上限 9 張）與兩個 FLUX dev 模型（上限 4 張）。
+- 參考圖張數：部分 edit 端點按張數加價，`openai/gpt-image-2/edit` 由 1 張 $0.070 升到 16 張 $0.250；`krea/v3/edit` 未指定 `size` 時 1 張 $0.240、8 張 $1.080，遠高於 `base_price` $0.030。
 - `hd`：僅 `midjourney/text-to-image` 有，開啟後由 $0.100 升為 $0.150。
 - `enable_web_search`、`enable_image_search`：見於 `google/nano-banana-2/text-to-image` 與 `google/nano-banana-2.1/text-to-image`（兩者皆有）與 `google/nano-banana-2/text-to-image-fast`（僅前者），每開啟一項在該解析度檔位的價格上加 $0.014，兩項可疊加；`google/nano-banana-2/text-to-image` 以 4K 同時開啟兩項為 $0.168。
 

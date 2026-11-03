@@ -6,6 +6,7 @@
   流程性的修改一律改這裡，不在各模型腳本重複實作。
   參數檢核也放這裡：`ws.size_type()` 產生 `--size` 的型別函式（收 `寬x高`，可指定單邊、總像素與長寬比上下限），`ws.number_type()` 產生數值範圍檢核。
 - 各模型腳本 `scripts/<模型名稱>.py` 只做三件事：定義 `MODEL_ID`、以 `add_model_args(parser)` 加入模型專屬參數、以 `build_payload(args, prompt)` 回傳 `prompt` 以外的請求欄位，最後呼叫 `ws.run(MODEL_ID, add_model_args, build_payload)`。
+  支援參考圖的腳本另外定義 `IMAGE_INPUT = ws.ImageInput(...)` 並傳給 `ws.run`；`--image` 參數、張數檢查、上傳、報價與寫入請求欄位都由共用邏輯處理，`build_payload` 不經手參考圖。
 - 檔名即模型名稱，規則是模型 ID 去掉供應商前綴、斜線改連字號，例如 `x-ai/grok-imagine-image-v2.0/text-to-image` 對應 `grok-imagine-image-v2.0-text-to-image.py`。
   `wsgen --list` 與預設輸出目錄都依此規則自動推算，新增腳本不需改 `wsgen`。
   例外是去掉前綴後只剩任務類別或以版號開頭的模型 ID：`midjourney/text-to-image` 與 `krea/v3/text-to-image` 會保留供應商，對應 `midjourney-text-to-image.py` 與 `krea-v3-text-to-image.py`，判斷依據是 `wavespeed_common.output_slug`。
@@ -15,14 +16,19 @@
 - 只用 Python 標準函式庫，不引入第三方套件。
 - 參數的可選值、預設值與範圍以 `documents/` 下的官方文件為準（`llms/` 內的 Input Schema 最精確），不憑記憶填寫。
   `documents/` 尚未收錄的模型，改以 `GET /api/v3/models` 回傳的 `api_schema.api_schemas[].request_schema` 為準，那是同一份 Input Schema 的線上版本。
-- 圖生圖參數（`image`、`mask_image`、`reference`、`sref`、`strength`）不在本專案範圍，各腳本一律不開放。
+- 參考圖依端點型態實作：
+  - 文生圖端點本身有選填圖片欄位（`image`、`reference`、`sref`）時，在既有腳本加 `IMAGE_INPUT`；`strength` 這類只在有參考圖時才有意義的參數列入 `dependents`。
+  - 參考圖獨立成 edit 端點時，新增一支腳本，檔名照樣由模型 ID 推算，例如 `wavespeed-ai/flux-3-klein-image-distilled/edit` 對應 `flux-3-klein-image-distilled-edit.py`；該腳本的 `aspect_ratio` 等欄位依 edit 端點的 Input Schema，不沿用文生圖的預設值。
+  - `min_items`、`max_items` 照抄 Input Schema 的 `minItems`、`maxItems`；部分模型按張數加價，因此張數一律在本機先擋下。
+  - 遮罩欄位（`mask_image`、`mask_url`）、LoRA、`sequential`、`edit-multi`、`multiple-angles` 端點不在本專案範圍。
+  - 來源圖與輔助參考圖分屬兩個欄位時（`ideogram-ai/ideogram-v4.5/edit`）用 `rest_field`，第一張進 `field`，其餘進 `rest_field`。
 - 命令列參數值若含 `*` 之類的 shell 特殊字元，提供不需引號的替代寫法，例如 `--size` 接受 `寬x高`。
 - 錯誤一律以 `sys.exit("中文訊息")` 結束，不讓例外堆疊外洩；所有會扣費的請求之前，先完成本機端的檢查。
 - 測試時以無效金鑰（`WAVESPEED_API_KEY=invalid`）驗證參數解析與 payload 組裝，或以 `--task-id` 取回既有任務，避免實際扣費。
   需要確認費用時以 `POST /api/v3/model/price` 報價，該端點不扣費；各模型的價格與計費參數整理在 `documents/price.md`。
   報價請求的參數要放在 `inputs` 欄位（`{"model_id": …, "inputs": {"prompt": …, "resolution": …}}`）；誤寫成 `input` 不會報錯，但所有檔位都只回傳底價。
 - 圖片輸出不進版控；`.env` 不進版控，範本放 `.env.example`。
-- 模型目錄沒有上架日期，調查新模型時先執行 `python3 tools/models_snapshot.py --type text-to-image`，
+- 模型目錄沒有上架日期，調查新模型時先執行 `python3 tools/models_snapshot.py --type text-to-image`（參考圖端點用 `--type image-to-image`），
   以 `documents/snapshots/` 內前一份快照比對出新增、下架與改價的模型，新快照隨調查結果提交。
   完整盤點流程（快照、重新報價、Schema 漂移、文件同步）見 `.claude/skills/model-survey/`。
 
@@ -39,7 +45,7 @@
 - 查 Input Schema：`wavespeed schema <模型 ID>`，或欄位表相同的 `wavespeed run <模型 ID> -h`。
   - `--json` 輸出原始 Schema；模型目錄快取 1 小時，`--refresh` 強制更新。
   - `size` 欄位只有 `type: string` 與預設值，沒有單邊、總像素與長寬比的上下限，`ws.size_type()` 需要的數值仍以 `documents/` 的官方文件為準。
-  - 欄位表會列出圖生圖參數，撰寫腳本時照「慣例」排除。
+  - 欄位表會列出遮罩與 LoRA 參數，撰寫腳本時照「慣例」排除。
 - 不扣費報價：`wavespeed price <模型 ID> -p test -i key=value --json`，資料來源與 `POST /api/v3/model/price` 相同。
 - 臨時試用尚未撰寫腳本的模型：`wavespeed run <模型 ID> -p "提示詞" -i key=value --download`，此指令會扣費。
   - `run` 的送出前檢核不涵蓋可選值：`output_format=bmp` 之類的錯誤值仍會送到伺服器，由伺服器回覆 `Invalid request body` 拒絕。
