@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""WaveSpeed 文生圖腳本的共用入口。
+"""WaveSpeed 生圖腳本的共用入口。
 
 以 -m/--model 指定模型名稱（對應 scripts/<模型名稱>.py），其餘參數原樣轉交給該腳本。
 可從任意目錄執行，腳本位置以本檔案所在目錄推算，經符號連結呼叫亦可。
@@ -8,6 +8,7 @@
     wsgen --list
     wsgen -m seedream-v4.5 --size 1440x2560
     wsgen -m grok-imagine-image-v2.0-text-to-image -p prompts/xxx.txt --resolution 1k
+    wsgen -m flux-3-klein-image-distilled-edit --image refs/a.png --prompt "Move the subject to a forest"
     wsgen -m seedream-v4.5 --help          顯示該模型腳本自己的參數說明
 """
 
