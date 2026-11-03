@@ -1,13 +1,12 @@
 #!/usr/bin/env python3
-"""以 WaveSpeed API 呼叫 wavespeed-ai/krea-v2-large/text-to-image 進行文生圖。
+"""以 WaveSpeed API 呼叫 wavespeed-ai/krea-v2-large/text-to-image 進行文生圖；指定 --image 時以參考圖引導風格。
 
 用法範例（於專案根目錄執行）：
     python3 scripts/krea-v2-large-text-to-image.py
     python3 scripts/krea-v2-large-text-to-image.py -o output/xxx --aspect-ratio 16:9 --creativity high
     python3 scripts/krea-v2-large-text-to-image.py --prompt "A cinematic shot of a city at sunset"
+    python3 scripts/krea-v2-large-text-to-image.py --image refs/a.png refs/b.png --prompt "A warrior in a bamboo forest"
     python3 scripts/krea-v2-large-text-to-image.py --task-id <任務 ID> -o output/xxx
-
-本腳本只做文生圖，未開放 API 的 reference 等圖生圖參數。
 """
 
 import argparse
@@ -15,6 +14,7 @@ import argparse
 import wavespeed_common as ws
 
 MODEL_ID = "wavespeed-ai/krea-v2-large/text-to-image"
+IMAGE_INPUT = ws.ImageInput("reference", max_items=10, shape="objects")
 ASPECT_RATIOS = ["1:1", "4:3", "3:2", "16:9", "2.35:1", "4:5", "2:3", "9:16"]
 CREATIVITY_LEVELS = ["raw", "low", "medium", "high"]
 
@@ -32,4 +32,4 @@ def build_payload(args: argparse.Namespace, prompt: str) -> dict:
 
 
 if __name__ == "__main__":
-    ws.run(MODEL_ID, add_model_args, build_payload)
+    ws.run(MODEL_ID, add_model_args, build_payload, IMAGE_INPUT)
