@@ -1,10 +1,11 @@
-"""WaveSpeed 文生圖腳本的共用邏輯：參數解析、金鑰載入、任務提交、輪詢與下載。
+"""WaveSpeed 生圖腳本的共用邏輯：參數解析、金鑰載入、參考圖上傳、任務提交、輪詢與下載。
 
 各模型腳本只需提供模型 ID、模型專屬參數與 payload 組裝方式，其餘交由 run() 處理。
 API 金鑰讀取順序：既有環境變數 WAVESPEED_API_KEY，其次為專案根目錄 .env 檔。
 """
 
 import argparse
+import hashlib
 import json
 import mimetypes
 import os
@@ -12,6 +13,7 @@ import re
 import sys
 import time
 from collections.abc import Callable
+from dataclasses import dataclass
 from datetime import datetime
 from http.client import RemoteDisconnected
 from pathlib import Path
@@ -23,6 +25,7 @@ API_BASE = "https://api.wavespeed.ai/api/v3"
 RESULT_URL = API_BASE + "/predictions/{id}/result"
 TERMINAL_FAILURES = {"failed", "cancelled", "timeout", "deleted"}
 REQUEST_TIMEOUT = 30.0
+UPLOAD_TIMEOUT = 120.0
 COMMENT_PREFIXES = ("#", "//")
 TASK_SLUGS = {"text-to-image", "image-to-image", "text-to-video", "image-to-video", "edit"}
 VERSION_SEGMENT = re.compile(r"v?\d+(\.\d+)*")
@@ -30,9 +33,40 @@ VERSION_SEGMENT = re.compile(r"v?\d+(\.\d+)*")
 PROJECT_ROOT = Path(__file__).resolve().parent.parent
 DEFAULT_PROMPT_FILE = PROJECT_ROOT / "prompts" / "default.txt"
 DOTENV_FILE = PROJECT_ROOT / ".env"
+UPLOAD_CACHE_FILE = Path.home() / ".cache" / "wavespeed-api" / "uploads.json"
 
 AddModelArgs = Callable[[argparse.ArgumentParser], None]
 BuildPayload = Callable[[argparse.Namespace, str], dict]
+
+
+@dataclass(frozen=True)
+class ImageInput:
+    """模型的參考圖欄位，張數上下限取自該模型 Input Schema 的 minItems 與 maxItems
+
+    shape 對應欄位在 API 的型別：list 是網址陣列、string 是單一網址、objects 是 {"image": 網址} 陣列。
+    dependents 列出只在有參考圖時才有意義的參數 dest，例如 strength。
+    rest_field 用於來源圖與輔助參考圖分屬兩個欄位的模型：第一張進 field，其餘進 rest_field。
+    """
+
+    field: str
+    max_items: int
+    min_items: int = 0
+    shape: str = "list"
+    dependents: tuple[str, ...] = ()
+    rest_field: str | None = None
+
+    def to_payload(self, urls: list[str]) -> dict:
+        payload = {self.field: self.encode(urls)}
+        if self.rest_field and urls[1:]:
+            payload[self.rest_field] = urls[1:]
+        return payload
+
+    def encode(self, urls: list[str]) -> str | list:
+        if self.shape == "string":
+            return urls[0]
+        if self.shape == "objects":
+            return [{"image": url} for url in urls]
+        return urls
 
 
 def output_slug(model_id: str) -> str:
@@ -113,9 +147,11 @@ def number_type(minimum: float, maximum: float, integer: bool = True) -> Callabl
     return parse
 
 
-def build_parser(model_id: str, add_model_args: AddModelArgs) -> argparse.ArgumentParser:
+def build_parser(
+    model_id: str, add_model_args: AddModelArgs, image_input: ImageInput | None = None,
+) -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(
-        description=f"以 {model_id} 進行文生圖，並將輸出圖像下載到本機",
+        description=f"以 {model_id} 生成圖像，並將輸出圖像下載到本機",
         formatter_class=argparse.ArgumentDefaultsHelpFormatter,
     )
     prompt_group = parser.add_mutually_exclusive_group()
@@ -130,6 +166,13 @@ def build_parser(model_id: str, add_model_args: AddModelArgs) -> argparse.Argume
         "-o", "--output-dir", type=Path, default=PROJECT_ROOT / "output" / output_slug(model_id),
         help="輸出圖像存放目錄，不存在時自動建立",
     )
+    if image_input:
+        parser.add_argument(
+            "--image", action="extend", nargs="+", metavar="路徑或網址",
+            help=f"參考圖，可接多個值或重複指定，須 {image_input.min_items} 到 {image_input.max_items} 張；"
+                 + ("第一張為來源圖，其餘為輔助參考圖；" if image_input.rest_field else "")
+                 + "本機檔案會上傳到 WaveSpeed",
+        )
     add_model_args(parser)
     parser.add_argument("--task-id", help="不重新提交，直接取回既有任務的輸出")
     parser.add_argument("--poll-interval", type=float, default=2.0, help="輪詢間隔秒數")
@@ -177,6 +220,120 @@ def request_json(url: str, headers: dict, payload: dict | None = None, retry: bo
         if retry:
             raise TransientError(str(error)) from error
         sys.exit(f"連線失敗 {url}：{error}")
+
+
+def is_url(value: str) -> bool:
+    return value.startswith(("http://", "https://"))
+
+
+def check_images(image_input: ImageInput, args: argparse.Namespace) -> list[str]:
+    """在上傳與扣費之前檢查參考圖的張數、重複與本機檔案；部分模型按張數計費，重複的圖只會多花錢"""
+    images = args.image or []
+    if not image_input.min_items <= len(images) <= image_input.max_items:
+        sys.exit(f"參考圖須 {image_input.min_items} 到 {image_input.max_items} 張，收到 {len(images)} 張，請以 --image 指定")
+    for name in image_input.dependents:
+        if not images and getattr(args, name) is not None:
+            sys.exit(f"--{name.replace('_', '-')} 須搭配 --image 使用")
+    seen = set()
+    for image in images:
+        key = image if is_url(image) else Path(image).resolve()
+        if key in seen:
+            sys.exit(f"參考圖重複：{image}")
+        seen.add(key)
+        if is_url(image):
+            continue
+        path = Path(image)
+        if not path.is_file():
+            sys.exit(f"找不到參考圖：{image}")
+        if path.stat().st_size == 0:
+            sys.exit(f"參考圖是空檔案：{image}")
+        if not (mimetypes.guess_type(path.name)[0] or "").startswith("image/"):
+            sys.exit(f"參考圖不是可辨識的圖片格式：{image}")
+    return images
+
+
+def upload_image(path: Path, headers: dict) -> str:
+    """向 media/uploads 取得上傳網址後以 PUT 傳送檔案，回傳可放進請求的託管網址"""
+    content = path.read_bytes()
+    content_type = mimetypes.guess_type(path.name)[0]
+    ticket = {"filename": path.name, "size": len(content), "content_type": content_type}
+    body = request_json(f"{API_BASE}/media/uploads", headers, ticket)
+    data = body.get("data") or {}
+    instruction = data.get("upload") or {}
+    if not data.get("download_url") or not instruction.get("url") or instruction.get("method", "").upper() != "PUT":
+        sys.exit(f"上傳回應格式不符：\n{json.dumps(body, ensure_ascii=False, indent=4)}")
+    request = Request(
+        instruction["url"], data=content, method="PUT",
+        headers={"Content-Type": content_type, **(instruction.get("headers") or {})},
+    )
+    try:
+        with urlopen(request, timeout=UPLOAD_TIMEOUT):
+            pass
+    except HTTPError as error:
+        sys.exit(f"上傳失敗 {path}：HTTP {error.code}\n{error.read().decode(errors='replace')}")
+    except (URLError, RemoteDisconnected, TimeoutError, ConnectionError) as error:
+        sys.exit(f"上傳失敗 {path}：{error}")
+    return data["download_url"]
+
+
+def read_upload_cache() -> dict:
+    try:
+        cache = json.loads(UPLOAD_CACHE_FILE.read_text(encoding="utf-8"))
+    except (OSError, ValueError):
+        return {}
+    return cache if isinstance(cache, dict) else {}
+
+
+def write_upload_cache(cache: dict) -> None:
+    """快取寫入失敗只代表下次重新上傳，不影響本次任務"""
+    try:
+        UPLOAD_CACHE_FILE.parent.mkdir(parents=True, exist_ok=True)
+        UPLOAD_CACHE_FILE.write_text(json.dumps(cache, indent=1) + "\n", encoding="utf-8")
+    except OSError as error:
+        print(f"警告：無法寫入上傳快取：{error}", file=sys.stderr)
+
+
+def url_alive(url: str) -> bool:
+    """官方未公布託管檔案的保留期限，因此沿用快取前先確認網址仍可下載"""
+    request = Request(url, method="HEAD", headers={"User-Agent": "wavespeed-api-script"})
+    try:
+        with urlopen(request, timeout=REQUEST_TIMEOUT):
+            return True
+    except (URLError, RemoteDisconnected, TimeoutError, ConnectionError):
+        return False
+
+
+def resolve_images(images: list[str], headers: dict) -> list[str]:
+    """把本機路徑換成託管網址；以檔案內容的 SHA-256 為鍵沿用先前的上傳，改名或搬移後仍可命中"""
+    cache = read_upload_cache()
+    urls = []
+    for image in images:
+        if is_url(image):
+            urls.append(image)
+            continue
+        digest = hashlib.sha256(Path(image).read_bytes()).hexdigest()
+        cached = cache.get(digest)
+        if isinstance(cached, str) and url_alive(cached):
+            print(f"沿用已上傳的參考圖：{image} → {cached}")
+            urls.append(cached)
+            continue
+        url = upload_image(Path(image), headers)
+        print(f"已上傳參考圖：{image} → {url}")
+        cache[digest] = url
+        write_upload_cache(cache)
+        urls.append(url)
+    return urls
+
+
+def print_quote(model_id: str, payload: dict, headers: dict) -> None:
+    """印出含參考圖的實際報價；報價端點不扣費，失敗時只警告，不阻擋提交"""
+    inputs = {"model_id": model_id, "inputs": payload}
+    try:
+        data = request_json(f"{API_BASE}/model/price", headers, inputs, retry=True).get("data") or {}
+    except (TransientError, SystemExit) as error:
+        print(f"警告：取得報價失敗：{error}", file=sys.stderr)
+        return
+    print(f"報價：定價 ${data.get('price')}，折後 ${data.get('discounted_price')}")
 
 
 def format_inference_time(result: dict) -> str | None:
@@ -257,8 +414,10 @@ def ensure_output_dir(path: Path) -> None:
         sys.exit(f"輸出目錄不可寫入：{path}")
 
 
-def run(model_id: str, add_model_args: AddModelArgs, build_payload: BuildPayload) -> None:
-    args = build_parser(model_id, add_model_args).parse_args()
+def run(
+    model_id: str, add_model_args: AddModelArgs, build_payload: BuildPayload, image_input: ImageInput | None = None,
+) -> None:
+    args = build_parser(model_id, add_model_args, image_input).parse_args()
     load_dotenv(DOTENV_FILE)
     api_key = os.environ.get("WAVESPEED_API_KEY")
     if not api_key:
@@ -271,10 +430,15 @@ def run(model_id: str, add_model_args: AddModelArgs, build_payload: BuildPayload
         print(f"取回既有任務：{prediction_id}")
     else:
         prompt = load_prompt(args)
+        images = check_images(image_input, args) if image_input else []
         payload = {"prompt": prompt, **build_payload(args, prompt)}
+        if images:
+            payload.update(image_input.to_payload(resolve_images(images, headers)))
         print(f"模型：{model_id}")
         print(f"提示詞來源：{'命令列 --prompt' if args.prompt is not None else args.prompt_file}")
         print("參數：" + " ".join(f"{key}={value}" for key, value in payload.items() if key != "prompt"))
+        if images:
+            print_quote(model_id, payload, headers)
 
         submit_body = request_json(f"{API_BASE}/{model_id}", headers, payload)
         task = submit_body.get("data", submit_body)
