@@ -81,7 +81,7 @@ def print_diff(old: dict[str, dict], new: dict[str, dict], model_type: str | Non
 
     print(f"新增 {len(added)} 個")
     for m in added:
-        mark = "" if model_type != "text-to-image" else ("　已有腳本" if has_script(m["model_id"]) else "　尚無腳本")
+        mark = "" if model_type not in ("text-to-image", "image-to-image") else ("　已有腳本" if has_script(m["model_id"]) else "　尚無腳本")
         print(f"  {m['type']:<16} {m['model_id']:<60} ${m['base_price']}{mark}")
     print(f"下架 {len(removed)} 個")
     for m in removed:

@@ -48,6 +48,7 @@ if $missing_only; then
   for script in "$PROJECT_ROOT"/scripts/*.py(N); do
     name="${script:t:r}"
     [[ $name == wavespeed_common ]] && continue
+    grep -q 'min_items=1' "$script" && continue
     grep -q -- "| $name " "$review_file" || models+=("$name")
   done
 fi

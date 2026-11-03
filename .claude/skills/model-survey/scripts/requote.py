@@ -6,7 +6,7 @@
     requote.py seedream-v5.0-pro …   只測指定腳本
     requote.py --json 結果.json      另存逐模型結果
 
-每個模型先以全預設參數報價，再把每個參數單獨拉到其他檔位（choices 逐一、布林旗標翻轉、整數取 Schema 的 maximum），
+每個模型先以全預設參數報價，再把每個參數單獨拉到其他檔位（choices 逐一、布林旗標翻轉、整數取 Schema 的 maximum、參考圖張數取上限），
 記錄價格區間、會改價的參數與折扣率；呼叫 POST /api/v3/model/price 不扣費。
 價格區間取所有計費參數同時拉到最低檔與最高檔的疊加極端，與 price.md 的定義一致。
 """
@@ -57,7 +57,10 @@ def variants(action: argparse.Action, schema_field: dict) -> list:
 def survey(key: str, module, schema: dict) -> dict:
     parser = sc.model_parser(module)
     defaults = parser.parse_args([])
-    base_payload = module.build_payload(defaults, "test")
+    spec = getattr(module, "IMAGE_INPUT", None)
+    base_count = spec.min_items if spec else 0
+    base_images = sc.image_payload(module, base_count)
+    base_payload = {**module.build_payload(defaults, "test"), **base_images}
     base, discount = sc.quote(key, module.MODEL_ID, base_payload)
     low, high, billing = base, base, set()
     cheapest, dearest = {}, {}
@@ -69,7 +72,7 @@ def survey(key: str, module, schema: dict) -> dict:
                 payload = module.build_payload(namespace, "test")
             except SystemExit:
                 continue
-            price, _ = sc.quote(key, module.MODEL_ID, payload)
+            price, _ = sc.quote(key, module.MODEL_ID, {**payload, **base_images})
             if price == base:
                 continue
             billing.add(action.dest)
@@ -78,14 +81,25 @@ def survey(key: str, module, schema: dict) -> dict:
             if price > dearest.get(action.dest, (base, None))[0]:
                 dearest[action.dest] = (price, value)
             low, high = min(low, price), max(high, price)
+    if spec and spec.max_items > base_count:
+        payload = {**module.build_payload(defaults, "test"), **sc.image_payload(module, spec.max_items)}
+        price, _ = sc.quote(key, module.MODEL_ID, payload)
+        if price != base:
+            billing.add(spec.field)
+            dearest[spec.field] = (price, spec.max_items)
+            low, high = min(low, price), max(high, price)
     # 計費參數會疊加（例如品質與解析度、解析度與搜尋旗標），再以全部最低檔與全部最高檔各報一次，區間取疊加後的極端
     for combo in (cheapest, dearest):
         if len(combo) < 2:
             continue
         namespace = parser.parse_args([])
+        images = base_images
         for dest, (_, value) in combo.items():
-            setattr(namespace, dest, value)
-        price, _ = sc.quote(key, module.MODEL_ID, module.build_payload(namespace, "test"))
+            if spec and dest == spec.field:
+                images = sc.image_payload(module, value)
+            else:
+                setattr(namespace, dest, value)
+        price, _ = sc.quote(key, module.MODEL_ID, {**module.build_payload(namespace, "test"), **images})
         low, high = min(low, price), max(high, price)
     return {"base": base, "low": low, "high": high, "params": sorted(billing), "discount": discount}
 

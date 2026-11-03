@@ -13,9 +13,9 @@ sys.path.insert(0, str(SCRIPTS_DIR))
 
 import wavespeed_common as ws  # noqa: E402
 
-# 圖生圖與 LoRA 相關欄位不在本專案範圍，比對 Schema 時略過
+# 參考圖欄位另由 compare_images 比對，LoRA 不在本專案範圍，比對 Schema 欄位增減時略過
 EXCLUDED_FIELDS = {
-    "image", "images", "mask_image", "reference", "sref", "cref", "oref", "strength", "image_url",
+    "image", "images", "mask_image", "mask_url", "reference", "sref", "cref", "oref", "strength", "image_url",
     "lora", "loras", "enable_sync_mode", "enable_base64_output", "prompt",
 }
 
@@ -71,11 +71,26 @@ def request_schema(entry: dict) -> dict:
         return {}
 
 
+def required_fields(entry: dict) -> list[str]:
+    try:
+        return entry["api_schema"]["api_schemas"][0]["request_schema"].get("required") or []
+    except (KeyError, IndexError, TypeError):
+        return []
+
+
 def quote(key: str, model_id: str, payload: dict) -> tuple[float, int]:
     """回傳（定價，折扣率百分比）。參數必須放在 inputs 欄位，放錯欄位不會報錯但所有檔位都只回底價。"""
     body = {"model_id": model_id, "inputs": {"prompt": "test", **payload}}
     data = ws.request_json(f"{ws.API_BASE}/model/price", headers(key), body)["data"]
     return float(data["price"]), int(data["discount_rate"])
+
+
+def image_payload(module, count: int) -> dict:
+    """組出報價用的參考圖欄位；報價只看張數，不會下載網址，因此用佔位網址"""
+    spec = getattr(module, "IMAGE_INPUT", None)
+    if not spec or not count:
+        return {}
+    return spec.to_payload(["https://example.com/reference.png"] * count)
 
 
 def dump_json(path: Path, data) -> None:
