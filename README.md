@@ -38,7 +38,7 @@
 
 ### 模型專屬參數
 
-共 100 個模型。各參數的可選值與預設值以 `./wsgen -m <模型名稱> --help` 為準。
+共 108 個模型。各參數的可選值與預設值以 `./wsgen -m <模型名稱> --help` 為準。
 「每張價格」為全用預設參數時的單張定價，括號內是把所有計費參數同時拉到最低與最高檔位的範圍；
 完整的價格區間、影響計費的參數與帳戶折扣見 [模型價格總表](documents/price.md)，
 調查方法與測試成本見 [模型價格調查與測試成本](.claude/plans/model-pricing-and-test-cost.md)。
@@ -76,6 +76,10 @@
 | `gpt-image-2.5-flare-text-to-image`          | `openai/gpt-image-2.5-flare/text-to-image`                | $0.024（$0.010 ～ $1.000） | `--aspect-ratio` `--resolution` `--quality` `--output-format`                                                        |
 | `gpt-image-2.5-sunburst-edit`                | `openai/gpt-image-2.5-sunburst/edit`                      | $0.039（$0.025 ～ $1.240） | `--image` `--aspect-ratio` `--resolution` `--quality` `--output-format`                                              |
 | `gpt-image-2.5-sunburst-text-to-image`       | `openai/gpt-image-2.5-sunburst/text-to-image`             | $0.024（$0.010 ～ $1.000） | `--aspect-ratio` `--resolution` `--quality` `--output-format`                                                        |
+| `gpt-image-2.6-flare-edit`                   | `openai/gpt-image-2.6-flare/edit`                         | $0.065（$0.045 ～ $1.090） | `--image` `--aspect-ratio` `--resolution` `--quality` `--complexity` `--output-format`                               |
+| `gpt-image-2.6-flare-text-to-image`          | `openai/gpt-image-2.6-flare/text-to-image`                | $0.050（$0.030 ～ $0.870） | `--aspect-ratio` `--resolution` `--quality` `--complexity` `--output-format` `--frame-count` `--frame-duration-ms`   |
+| `gpt-image-2.6-sunburst-edit`                | `openai/gpt-image-2.6-sunburst/edit`                      | $0.065（$0.045 ～ $1.090） | `--image` `--aspect-ratio` `--resolution` `--quality` `--complexity` `--output-format`                               |
+| `gpt-image-2.6-sunburst-text-to-image`       | `openai/gpt-image-2.6-sunburst/text-to-image`             | $0.050（$0.030 ～ $0.870） | `--aspect-ratio` `--resolution` `--quality` `--complexity` `--output-format` `--frame-count` `--frame-duration-ms`   |
 | `grok-imagine-image-v2.0-edit`               | `x-ai/grok-imagine-image-v2.0/edit`                       | $0.090（$0.050 ～ $0.110） | `--image` `--resolution` `--quality`                                                                                 |
 | `grok-imagine-image-v2.0-text-to-image`      | `x-ai/grok-imagine-image-v2.0/text-to-image`              | $0.080（$0.040 ～ $0.080） | `--aspect-ratio` `--resolution` `--quality`                                                                          |
 | `hunyuan-image-2.1`                          | `wavespeed-ai/hunyuan-image-2.1`                          | $0.025                     | `--size` `--seed` `--output-format`                                                                                  |
@@ -109,6 +113,8 @@
 | `nano-banana-pro-edit`                       | `google/nano-banana-pro/edit`                             | $0.140（$0.140 ～ $0.240） | `--image` `--aspect-ratio` `--resolution` `--output-format`                                                          |
 | `nano-banana-pro-text-to-image-ultra`        | `google/nano-banana-pro/text-to-image-ultra`              | $0.150（$0.150 ～ $0.180） | `--aspect-ratio` `--resolution` `--output-format`                                                                    |
 | `nano-banana-pro-text-to-image`              | `google/nano-banana-pro/text-to-image`                    | $0.140（$0.140 ～ $0.240） | `--aspect-ratio` `--resolution` `--output-format`                                                                    |
+| `p-h3-image-edit`                            | `wavespeed-ai/p-h3-image/edit`                            | $0.030（$0.030 ～ $0.220） | `--image` `--aspect-ratio` `--resolution` `--output-format` `--seed`                                                 |
+| `p-h3-image-text-to-image`                   | `wavespeed-ai/p-h3-image/text-to-image`                   | $0.020（$0.020 ～ $0.120） | `--aspect-ratio` `--resolution` `--output-format` `--seed`                                                           |
 | `qwen-image-2.0-edit`                        | `wavespeed-ai/qwen-image-2.0/edit`                        | $0.030                     | `--image` `--size` `--seed`                                                                                          |
 | `qwen-image-2.0-pro-edit`                    | `wavespeed-ai/qwen-image-2.0-pro/edit`                    | $0.070                     | `--image` `--size` `--seed`                                                                                          |
 | `qwen-image-2.0-pro-text-to-image`           | `wavespeed-ai/qwen-image-2.0-pro/text-to-image`           | $0.070                     | `--size` `--seed`                                                                                                    |
@@ -135,6 +141,8 @@
 | `seedream-v5.0-lite`                         | `bytedance/seedream-v5.0-lite`                            | $0.035                     | `--size` `--output-format`                                                                                           |
 | `seedream-v5.0-pro-edit`                     | `bytedance/seedream-v5.0-pro/edit`                        | $0.045（$0.045 ～ $0.117） | `--image` `--aspect-ratio` `--resolution` `--output-format` `--prompt-optimization-mode`                             |
 | `seedream-v5.0-pro`                          | `bytedance/seedream-v5.0-pro`                             | $0.045（$0.045 ～ $0.090） | `--aspect-ratio` `--resolution` `--output-format` `--prompt-optimization-mode`                                       |
+| `seedream-v5.5-edit`                         | `bytedance/seedream-v5.5/edit`                            | $0.028（$0.028 ～ $0.134） | `--image` `--aspect-ratio` `--resolution` `--background` `--output-format`                                           |
+| `seedream-v5.5`                              | `bytedance/seedream-v5.5`                                 | $0.020（$0.020 ～ $0.054） | `--aspect-ratio` `--resolution` `--background` `--output-format`                                                     |
 | `wan-2.5-image-edit`                         | `alibaba/wan-2.5/image-edit`                              | $0.035                     | `--image` `--negative-prompt` `--size` `--seed`                                                                      |
 | `wan-2.5-text-to-image`                      | `alibaba/wan-2.5/text-to-image`                           | $0.030                     | `--negative-prompt` `--size` `--enable-prompt-expansion` `--seed`                                                    |
 | `wan-2.6-image-edit`                         | `alibaba/wan-2.6/image-edit`                              | $0.035                     | `--image` `--size` `--enable-prompt-expansion` `--seed`                                                              |
@@ -217,7 +225,7 @@ python3 tools/models_snapshot.py --diff-only            # 不呼叫 API，只比
 | `scripts/<模型名稱>.py`        | 各模型腳本，只定義模型 ID、專屬參數與 payload                            |
 | `prompts/`                     | 提示詞檔                                                                 |
 | `output/`                      | 預設輸出目錄，圖片副檔名已在 `.gitignore` 排除                           |
-| `documents/`                   | 官方 API 文件、原始 HTML 與 llms.txt；`price.md` 為 100 個模型的價格總表 |
+| `documents/`                   | 官方 API 文件、原始 HTML 與 llms.txt；`price.md` 為 108 個模型的價格總表 |
 | `documents/snapshots/`         | 模型目錄快照，由 `tools/models_snapshot.py` 產生                         |
 | `tools/models_snapshot.py`     | 擷取模型目錄快照並與前一份比對，列出新增、下架與改價的模型               |
 | `.claude/plans/`               | 調查與規劃文件，含價格調查方法與測試成本估算                             |

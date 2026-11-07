@@ -1,10 +1,10 @@
 ---
-updated: 2026-11-03T14:40:31+08:00
+updated: 2026-11-07T22:59:03+08:00
 ---
 
 # WaveSpeed 模型價格調查與測試成本
 
-100 個模型的價格明細見 [價格總表](../../documents/price.md)，本文件記錄調查方法、計費參數的行為，以及串接 40 個新模型時的測試成本。
+108 個模型的價格明細見 [價格總表](../../documents/price.md)，本文件記錄調查方法、計費參數的行為，以及串接 40 個新模型時的測試成本。
 下文的模型數與價格統計以文生圖端點為準；edit 端點與 `--image` 的計費另見「計費參數」的參考圖張數。
 
 ## 資料來源
@@ -19,19 +19,21 @@ updated: 2026-11-03T14:40:31+08:00
 
 ## 計費參數
 
-七個參數會改變價格，其餘參數不論怎麼設都不影響計費：
+八個參數會改變價格，其餘參數不論怎麼設都不影響計費：
 
-- `resolution`：解析度檔位，是最普遍的計費變數，共 19 個模型採用。
+- `resolution`：解析度檔位，是最普遍的計費變數，共 23 個模型採用。
   漲幅差異很大，`google/nano-banana-2/text-to-image-fast` 由 2K 升到 4K 只多 11％，`wavespeed-ai/minimax-h3/text-to-image` 由 1K 升到 2K 則漲為 3 倍，`wavespeed-ai/qwen-image-2.1/text-to-image` 的 1k、1.5k、2k 三檔為 $0.020、$0.040、$0.080，每升一檔加倍。
   `black-forest-labs/flux-3/text-to-image` 的跨度最大，1k、2k、4k 為 $0.048、$0.100、$0.607，相差約 13 倍。
   另有 `kwaivgi/kling-image-v3/text-to-image`、`alibaba/qwen-image-3.0/text-to-image`、`ideogram-ai/ideogram-v4.5` 與 `bytedance/seedream-v5.0-flash` 雖有 `resolution` 參數，但各檔位實測同價。
-- `quality`：品質檔位，見於 `ideogram-ai/ideogram-v4`、`ideogram-ai/ideogram-v4.5`、三個 OpenAI GPT Image 模型與 `x-ai/grok-imagine-image-v2.0/text-to-image`。
+- `quality`：品質檔位，見於 `ideogram-ai/ideogram-v4`、`ideogram-ai/ideogram-v4.5`、五個 OpenAI GPT Image 模型與 `x-ai/grok-imagine-image-v2.0/text-to-image`。
   `ideogram-ai/ideogram-v4.5` 只以 `quality` 計價，`low`、`medium`、`high` 為 $0.030、$0.060、$0.220。
   Grok 的 `quality` 與 `resolution` 各升一檔加 $0.020，`low`＋1K 為 $0.040、`medium`＋2K 為 $0.080。
   兩個 GPT Image 2.5 模型的跨度最大，`low` 為 $0.010、`max` 為 $0.360，再疊加 4K 解析度為 $1.000，相差 100 倍。
+  兩個 GPT Image 2.6 模型的 `low` 為 $0.030，`max` 疊加 4K 解析度為 $0.870。
   `quality` 與 `resolution` 的加價會相乘疊加，`openai/gpt-image-2/text-to-image` 以 `high`＋4K 為 $0.720，`ideogram-ai/ideogram-v4` 以最高品質＋最高解析度為 $0.200。
 - `num_images`：單次產圖張數，價格與張數成正比，見於 `kwaivgi/kling-image-v3/text-to-image`（上限 9 張）與兩個 FLUX dev 模型（上限 4 張）。
 - 參考圖張數：部分 edit 端點按張數加價，`openai/gpt-image-2/edit` 由 1 張 $0.070 升到 16 張 $0.250；`krea/v3/edit` 未指定 `size` 時 1 張 $0.240、8 張 $1.080，遠高於 `base_price` $0.030。
+- `output_format`：僅兩個 GPT Image 2.6 文生圖模型的 `svg` 加價，由 $0.050 升為 $0.070；`gif` 與點陣格式同價，`frame_count` 不影響價格。
 - `hd`：僅 `midjourney/text-to-image` 有，開啟後由 $0.100 升為 $0.150。
 - `enable_web_search`、`enable_image_search`：見於 `google/nano-banana-2/text-to-image` 與 `google/nano-banana-2.1/text-to-image`（兩者皆有）與 `google/nano-banana-2/text-to-image-fast`（僅前者），每開啟一項在該解析度檔位的價格上加 $0.014，兩項可疊加；`google/nano-banana-2/text-to-image` 以 4K 同時開啟兩項為 $0.168。
 
@@ -39,23 +41,25 @@ updated: 2026-11-03T14:40:31+08:00
 
 - 自由字串形式的 `size`：`wavespeed-ai/flux-2-max/text-to-image`、`z-ai/glm-image/text-to-image`、`alibaba/wan-2.7/text-to-image-pro` 等模型從 `512*512` 到 `8192*8192` 皆同價。
   例外是 `krea/v3/text-to-image`，價格與總像素成正比，每百萬像素 $0.030，`256*256` 為 $0.001875、上限 `2048*2048` 為 $0.120。
-- `aspect_ratio`、`num_inference_steps`、`guidance_scale`、`strength`、`creativity`、`prompt_optimization_mode`、`thinking_mode`、`enable_prompt_expansion`、`output_format`。
+- `aspect_ratio`、`num_inference_steps`、`guidance_scale`、`strength`、`creativity`、`prompt_optimization_mode`、`thinking_mode`、`enable_prompt_expansion`、`complexity`、`background`，以及 GPT Image 2.6 文生圖以外模型的 `output_format`。
 - Midjourney 的 `quality`、`stylize`、`chaos`、`weird`：與其他模型的 `quality` 不同，Midjourney 的檔位切換不改價，只有 `hd` 改價。
 
 注意 `bytedance/seedream-v5.0-pro` 的計費參數名為 `resolution` 而非 `size`；帶 `size` 送出報價不會反映 2K 加倍，實跑時檔位仍以 `resolution` 為準。
 
 ## 帳戶折扣
 
-六個模型目前有折扣，其餘 51 個以定價計費。折扣為平台給定、隨時可能調整，不宜作為長期預算依據。
+八個模型目前有折扣，其餘 53 個以定價計費。折扣為平台給定、隨時可能調整，不宜作為長期預算依據。
 
-| 模型 ID                                | 折扣率 | 預設定價 | 預設實付 |
-| -------------------------------------- | ------ | -------- | -------- |
-| `bytedance/seedream-v5.0-flash`        | 90％   | $0.027   | $0.0243  |
-| `bytedance/seedream-v5.0-pro`          | 90％   | $0.045   | $0.0405  |
-| `google/nano-banana-2/text-to-image`   | 90％   | $0.070   | $0.0630  |
-| `google/nano-banana-2.1/text-to-image` | 90％   | $0.040   | $0.0360  |
-| `google/nano-banana-pro/text-to-image` | 90％   | $0.140   | $0.1260  |
-| `openai/gpt-image-2/text-to-image`     | 95％   | $0.060   | $0.0570  |
+| 模型 ID                                       | 折扣率 | 預設定價 | 預設實付 |
+| --------------------------------------------- | ------ | -------- | -------- |
+| `bytedance/seedream-v5.0-flash`               | 90％   | $0.027   | $0.0243  |
+| `bytedance/seedream-v5.0-pro`                 | 90％   | $0.045   | $0.0405  |
+| `google/nano-banana-2/text-to-image`          | 90％   | $0.070   | $0.0630  |
+| `google/nano-banana-2.1/text-to-image`        | 90％   | $0.040   | $0.0360  |
+| `google/nano-banana-pro/text-to-image`        | 90％   | $0.140   | $0.1260  |
+| `openai/gpt-image-2/text-to-image`            | 95％   | $0.060   | $0.0570  |
+| `openai/gpt-image-2.6-flare/text-to-image`    | 90％   | $0.050   | $0.0450  |
+| `openai/gpt-image-2.6-sunburst/text-to-image` | 90％   | $0.050   | $0.0450  |
 
 ## 測試成本估算
 

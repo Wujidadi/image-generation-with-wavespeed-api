@@ -1,0 +1,42 @@
+#!/usr/bin/env python3
+"""以 WaveSpeed API 呼叫 bytedance/seedream-v5.5 進行文生圖。
+
+用法範例（於專案根目錄執行）：
+    python3 scripts/seedream-v5.5.py
+    python3 scripts/seedream-v5.5.py -p prompts/xxx.txt -o output/xxx --aspect-ratio 9:16 --resolution 2k
+    python3 scripts/seedream-v5.5.py --prompt "A product shot of a ceramic mug" --background transparent
+    python3 scripts/seedream-v5.5.py --task-id <任務 ID> -o output/xxx
+"""
+
+import argparse
+
+import wavespeed_common as ws
+
+MODEL_ID = "bytedance/seedream-v5.5"
+ASPECT_RATIOS = [
+    "1:1", "1:2", "2:1", "1:3", "3:1", "2:3", "3:2", "3:4", "4:3", "4:5", "5:4", "9:16", "16:9", "9:21",
+    "21:9",
+]
+RESOLUTIONS = ["1k", "1.5k", "2k", "3k"]
+BACKGROUNDS = ["auto", "transparent", "opaque"]
+OUTPUT_FORMATS = ["jpeg", "png"]
+
+
+def add_model_args(parser: argparse.ArgumentParser) -> None:
+    parser.add_argument("--aspect-ratio", choices=ASPECT_RATIOS, default="1:1", help="輸出長寬比")
+    parser.add_argument("--resolution", choices=RESOLUTIONS, default="1k", help="輸出解析度層級，同時是計費依據")
+    parser.add_argument("--background", choices=BACKGROUNDS, default="auto", help="背景處理，transparent 需搭配 png")
+    parser.add_argument("--output-format", choices=OUTPUT_FORMATS, default="png", help="輸出圖片格式")
+
+
+def build_payload(args: argparse.Namespace, prompt: str) -> dict:
+    return {
+        "aspect_ratio": args.aspect_ratio,
+        "resolution": args.resolution,
+        "background": args.background,
+        "output_format": args.output_format,
+    }
+
+
+if __name__ == "__main__":
+    ws.run(MODEL_ID, add_model_args, build_payload)

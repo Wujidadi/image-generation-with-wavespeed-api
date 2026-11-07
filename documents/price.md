@@ -2,12 +2,12 @@
 sources:
   - "GET https://api.wavespeed.ai/api/v3/models（模型目錄，含 base_price 與 Input Schema）"
   - "POST https://api.wavespeed.ai/api/v3/model/price（逐項報價，呼叫本端點不扣費）"
-retrieved: 2026-11-03T15:07:26+08:00
+retrieved: 2026-11-07T22:59:03+08:00
 ---
 
 # WaveSpeed 模型價格總表
 
-本專案已串接的 100 個模型，單次成功呼叫、產出 1 張圖的美元金額。
+本專案已串接的 108 個模型，單次成功呼叫、產出 1 張圖的美元金額。
 依預設價格由高至低排列，同價者依模型 ID 排序。
 
 各欄位的定義：
@@ -42,12 +42,16 @@ retrieved: 2026-11-03T15:07:26+08:00
 | `wavespeed-ai/flux-2-max/text-to-image`                   | $0.070   | 固定             | 無                                                         | 無       |
 | `wavespeed-ai/qwen-image-2.0-pro/edit`                    | $0.070   | 固定             | 無                                                         | 無       |
 | `wavespeed-ai/qwen-image-2.0-pro/text-to-image`           | $0.070   | 固定             | 無                                                         | 無       |
+| `openai/gpt-image-2.6-flare/edit`                         | $0.065   | $0.045 ～ $1.090 | images、quality、resolution                                | 90％     |
+| `openai/gpt-image-2.6-sunburst/edit`                      | $0.065   | $0.045 ～ $1.090 | images、quality、resolution                                | 90％     |
 | `ideogram-ai/ideogram-v4.5`                               | $0.060   | $0.030 ～ $0.220 | quality                                                    | 無       |
 | `ideogram-ai/ideogram-v4.5/edit`                          | $0.060   | $0.008 ～ $0.220 | quality                                                    | 無       |
 | `openai/gpt-image-2/text-to-image`                        | $0.060   | $0.010 ～ $0.720 | quality、resolution                                        | 95％     |
 | `wavespeed-ai/flux-2-flex/text-to-image`                  | $0.060   | 固定             | 無                                                         | 無       |
 | `wavespeed-ai/krea-v2-large/text-to-image`                | $0.060   | $0.060 ～ $0.065 | reference                                                  | 無       |
 | `ideogram-ai/ideogram-v4`                                 | $0.050   | $0.025 ～ $0.200 | quality、resolution                                        | 無       |
+| `openai/gpt-image-2.6-flare/text-to-image`                | $0.050   | $0.030 ～ $0.870 | output_format、quality、resolution                         | 90％     |
+| `openai/gpt-image-2.6-sunburst/text-to-image`             | $0.050   | $0.030 ～ $0.870 | output_format、quality、resolution                         | 90％     |
 | `black-forest-labs/flux-3/image-edit`                     | $0.048   | $0.048 ～ $0.607 | resolution                                                 | 無       |
 | `black-forest-labs/flux-3/text-to-image`                  | $0.048   | $0.048 ～ $0.607 | resolution                                                 | 無       |
 | `wavespeed-ai/flux-2-turbo/edit`                          | $0.048   | $0.048 ～ $0.064 | images                                                     | 無       |
@@ -83,9 +87,11 @@ retrieved: 2026-11-03T15:07:26+08:00
 | `wavespeed-ai/flux-3-klein-image-base/text-to-image`      | $0.030   | $0.030 ～ $0.120 | resolution                                                 | 無       |
 | `wavespeed-ai/krea-v2-medium/text-to-image`               | $0.030   | 固定             | 無                                                         | 無       |
 | `wavespeed-ai/minimax-h3/image-edit`                      | $0.030   | $0.030 ～ $0.130 | images、resolution                                         | 無       |
+| `wavespeed-ai/p-h3-image/edit`                            | $0.030   | $0.030 ～ $0.220 | images、resolution                                         | 無       |
 | `wavespeed-ai/qwen-image-2.0/edit`                        | $0.030   | 固定             | 無                                                         | 無       |
 | `wavespeed-ai/qwen-image-2.0/text-to-image`               | $0.030   | 固定             | 無                                                         | 無       |
 | `wavespeed-ai/qwen-image-2.1/edit`                        | $0.030   | $0.030 ～ $0.300 | images、resolution                                         | 無       |
+| `bytedance/seedream-v5.5/edit`                            | $0.028   | $0.028 ～ $0.134 | images、resolution                                         | 無       |
 | `kwaivgi/kling-image-v3/edit`                             | $0.028   | $0.028 ～ $0.252 | num_images                                                 | 無       |
 | `kwaivgi/kling-image-v3/text-to-image`                    | $0.028   | $0.028 ～ $0.252 | num_images                                                 | 無       |
 | `bytedance/seedream-v4`                                   | $0.027   | 固定             | 無                                                         | 無       |
@@ -98,8 +104,10 @@ retrieved: 2026-11-03T15:07:26+08:00
 | `openai/gpt-image-2.5-sunburst/text-to-image`             | $0.024   | $0.010 ～ $1.000 | quality、resolution                                        | 無       |
 | `wavespeed-ai/flux-2-dev/edit`                            | $0.024   | 固定             | 無                                                         | 無       |
 | `wavespeed-ai/flux-2-klein-base-9b/edit`                  | $0.021   | 固定             | 無                                                         | 無       |
+| `bytedance/seedream-v5.5`                                 | $0.020   | $0.020 ～ $0.054 | resolution                                                 | 無       |
 | `wavespeed-ai/minimax-h3/text-to-image`                   | $0.020   | $0.020 ～ $0.060 | resolution                                                 | 無       |
 | `wavespeed-ai/moss-image/text-to-image`                   | $0.020   | $0.020 ～ $0.080 | resolution                                                 | 無       |
+| `wavespeed-ai/p-h3-image/text-to-image`                   | $0.020   | $0.020 ～ $0.120 | resolution                                                 | 無       |
 | `wavespeed-ai/qwen-image-2.1/text-to-image`               | $0.020   | $0.020 ～ $0.080 | resolution                                                 | 無       |
 | `wavespeed-ai/qwen-image/edit`                            | $0.020   | 固定             | 無                                                         | 無       |
 | `wavespeed-ai/qwen-image/edit-2511`                       | $0.020   | 固定             | 無                                                         | 無       |
