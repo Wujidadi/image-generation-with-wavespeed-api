@@ -27,7 +27,8 @@ description: 對 WaveSpeed 文生圖模型做普通級（G）、輔導級（PG-1
 
 ## 流程
 
-1. **確認模型清單**。使用者通常點名模型；沒點名時用 `--models-missing-from-review` 列出 `scripts/` 內尚未出現在第一個等級實測表中的腳本，先把清單給使用者確認再跑，因為每張圖都會扣費。
+1. **確認模型清單**。使用者通常點名模型；沒點名時以 `--dry-run --models-missing-from-review` 列出 `scripts/` 內尚未出現在第一個等級實測表中的腳本（必須帶參考圖的 edit 腳本會略過），先把清單給使用者確認再跑，因為每張圖都會扣費。
+   `--models-missing-from-review` 是選取模型的參數，不是列清單的參數：不加 `--dry-run` 時，runner 會立即對清單內的所有模型送出請求並扣費。
 2. **確認輸出目錄已登記**。`ws_outdir` 只認 `WS_ENV` 裡 `WS_OUTDIRS` 登記過的腳本名；新模型要先在 `$SHARED_DIR/scripts/env` 與同目錄的 `model-list.txt` 加一列（兩檔內容相同，短名慣例如 `nano-banana-2.1`、`flux-3-klein-base`），runner 會在送出任何請求前擋下未登記的模型。
 3. **乾跑**：加 `--dry-run` 看結果目錄、等級與模型清單，確認無誤再正式跑。
 4. **正式跑**：

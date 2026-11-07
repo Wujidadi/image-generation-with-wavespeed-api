@@ -3,7 +3,8 @@
 #
 # 用法：
 #   run-rating-test.zsh [--config 檔案] [--ratings G,PG13,R18] [--dry-run] <模型腳本名稱>...
-#   run-rating-test.zsh --ratings PG13 --models-missing-from-review   # 只測實測表尚未收錄的模型
+#   run-rating-test.zsh --ratings PG13 --models-missing-from-review   # 只測實測表尚未收錄的模型，立即送出並扣費
+#   run-rating-test.zsh --dry-run --models-missing-from-review        # 只列出缺測模型，不送出請求
 #
 # 每個等級各自循序執行，三個等級彼此平行；結束後印出 RESULTS_DIR，交給 append-results.py 產表。
 
@@ -24,7 +25,7 @@ while (( $# )); do
     --ratings) ratings=(${(s:,:)2}); shift 2 ;;
     --dry-run) dry_run=true; shift ;;
     --models-missing-from-review) missing_only=true; shift ;;
-    -h|--help) sed -n '2,8p' "${(%):-%x}" | sed 's/^# \{0,1\}//'; return 0 ;;
+    -h|--help) sed -n '2,9p' "${(%):-%x}" | sed 's/^# \{0,1\}//'; return 0 ;;
     -*) print -u2 -r -- "未知參數：$1"; return 2 ;;
     *) models+=("$1"); shift ;;
   esac
