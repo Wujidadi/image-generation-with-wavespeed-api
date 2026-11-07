@@ -84,12 +84,12 @@ if $dry_run; then
 fi
 
 run_rating() {
-  local rating="$1" prompt="$PROMPT_DIR/${prompt_of[$1]}" m outdir
+  local rating="$1" prompt="$PROMPT_DIR/${prompt_of[$1]}" m outdir rc
   mkdir -p "$run_dir/$rating"
   for m in $models; do
     outdir="$(ws_outdir "$m")"
-    wsgen -m "$m" -p "$prompt" -o "$outdir" > "$run_dir/$rating/$m.log" 2>&1
-    print -r -- "exit=$?" >> "$run_dir/$rating/$m.log"
+    wsgen -m "$m" -p "$prompt" -o "$outdir" > "$run_dir/$rating/$m.log" 2>&1 && rc=0 || rc=$?
+    print -r -- "exit=$rc" >> "$run_dir/$rating/$m.log"
     print -r -- "[$rating] $m 完成"
   done
 }
