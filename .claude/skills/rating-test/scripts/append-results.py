@@ -44,7 +44,7 @@ def parse_log(path: Path) -> dict:
         result["ms"] = int(m.group(1))
     if m := re.search(r"^已儲存：(.+)$", text, re.M):
         result["file"] = Path(m.group(1).strip()).name
-    if '"code": 1200' in text:
+    if re.search(r'"code": (1200|1405)\b', text):
         result["blocked"] = True
     elif m := re.search(r'"error": "(.+?)"', text):
         result["error"] = m.group(1)
@@ -72,7 +72,7 @@ def build_rows(rating: str, logs: list[dict], prices: dict[str, str]) -> list[li
             note = "" if r["file"] else ("擋住" if r["blocked"] else f"失敗：{r['error']}")
             row = [model_id, r["script"], price, seconds(r["ms"]), r["file"] or "", note]
         else:
-            effect = "" if r["file"] else "😡"
+            effect = "😡" if r["blocked"] else ""
             note = r["file"] or ("" if r["blocked"] else f"失敗：{r['error']}")
             row = [model_id, r["script"], price, seconds(r["ms"]), effect, note]
         (ok if r["file"] else bad).append(row)
