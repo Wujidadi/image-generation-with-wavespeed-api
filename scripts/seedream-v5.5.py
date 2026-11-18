@@ -17,7 +17,7 @@ ASPECT_RATIOS = [
     "1:1", "1:2", "2:1", "1:3", "3:1", "2:3", "3:2", "3:4", "4:3", "4:5", "5:4", "9:16", "16:9", "9:21",
     "21:9",
 ]
-RESOLUTIONS = ["1k", "1.5k", "2k", "3k"]
+RESOLUTIONS = ["1k", "1.5k", "2k"]
 BACKGROUNDS = ["auto", "transparent", "opaque"]
 OUTPUT_FORMATS = ["jpeg", "png"]
 

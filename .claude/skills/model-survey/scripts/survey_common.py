@@ -15,7 +15,7 @@ import wavespeed_common as ws  # noqa: E402
 
 # 參考圖欄位另由 compare_images 比對，LoRA 不在本專案範圍，比對 Schema 欄位增減時略過
 EXCLUDED_FIELDS = {
-    "image", "images", "mask_image", "mask_url", "reference", "sref", "cref", "oref", "strength", "image_url",
+    "image", "images", "mask_image", "mask_url", "markup_image", "reference", "sref", "cref", "oref", "strength", "image_url",
     "lora", "loras", "enable_sync_mode", "enable_base64_output", "prompt",
 }
 

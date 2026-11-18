@@ -18,7 +18,7 @@ ASPECT_RATIOS = [
 RESOLUTIONS = ["1k", "2k", "4k"]
 QUALITIES = ["low", "medium", "high", "xhigh", "max"]
 COMPLEXITIES = ["low", "medium", "high"]
-OUTPUT_FORMATS = ["png", "jpeg", "webp"]
+OUTPUT_FORMATS = ["png", "jpeg", "webp", "gif"]
 IMAGE_INPUT = ws.ImageInput("images", min_items=1, max_items=16)
 
 
@@ -28,6 +28,14 @@ def add_model_args(parser: argparse.ArgumentParser) -> None:
     parser.add_argument("--quality", choices=QUALITIES, default="medium", help="生成品質層級，同時是計費依據")
     parser.add_argument("--complexity", choices=COMPLEXITIES, default="high", help="生成前的構圖規劃程度，越高越能處理細節繁多的提示詞，不影響價格")
     parser.add_argument("--output-format", choices=OUTPUT_FORMATS, default="png", help="輸出圖片格式")
+    parser.add_argument(
+        "--frame-count", type=ws.number_type(2, 16), default=9,
+        help="動畫影格數，只在 --output-format gif 時送出",
+    )
+    parser.add_argument(
+        "--frame-duration-ms", type=ws.number_type(20, 2000), default=200,
+        help="每格停留毫秒數，只在 --output-format gif 時送出",
+    )
 
 
 def build_payload(args: argparse.Namespace, prompt: str) -> dict:
@@ -39,6 +47,9 @@ def build_payload(args: argparse.Namespace, prompt: str) -> dict:
     }
     if args.aspect_ratio is not None:
         payload["aspect_ratio"] = args.aspect_ratio
+    if args.output_format == "gif":
+        payload["frame_count"] = args.frame_count
+        payload["frame_duration_ms"] = args.frame_duration_ms
     return payload
 
 

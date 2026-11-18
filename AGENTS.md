@@ -22,7 +22,7 @@
   - 文生圖端點本身有選填圖片欄位（`image`、`reference`、`sref`）時，在既有腳本加 `IMAGE_INPUT`；`strength` 這類只在有參考圖時才有意義的參數列入 `dependents`。
   - 參考圖獨立成 edit 端點時，新增一支腳本，檔名照樣由模型 ID 推算，例如 `wavespeed-ai/flux-3-klein-image-distilled/edit` 對應 `wavespeed-flux-3-klein-image-distilled-edit.py`；該腳本的 `aspect_ratio` 等欄位依 edit 端點的 Input Schema，不沿用文生圖的預設值。
   - `min_items`、`max_items` 照抄 Input Schema 的 `minItems`、`maxItems`；部分模型按張數加價，因此張數一律在本機先擋下。
-  - 遮罩欄位（`mask_image`、`mask_url`）、LoRA、`sequential`、`edit-multi`、`multiple-angles` 端點不在本專案範圍。
+  - 遮罩與標註欄位（`mask_image`、`mask_url`、`markup_image`）、LoRA、`sequential`、`edit-multi`、`multiple-angles` 端點不在本專案範圍。
   - 來源圖與輔助參考圖分屬兩個欄位時（`ideogram-ai/ideogram-v4.5/edit`）用 `rest_field`，第一張進 `field`，其餘進 `rest_field`。
 - 命令列參數值若含 `*` 之類的 shell 特殊字元，提供不需引號的替代寫法，例如 `--size` 接受 `寬x高`。
 - 錯誤一律以 `sys.exit("中文訊息")` 結束，不讓例外堆疊外洩；所有會扣費的請求之前，先完成本機端的檢查。
