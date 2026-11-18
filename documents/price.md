@@ -2,7 +2,7 @@
 sources:
   - "GET https://api.wavespeed.ai/api/v3/models（模型目錄，含 base_price 與 Input Schema）"
   - "POST https://api.wavespeed.ai/api/v3/model/price（逐項報價，呼叫本端點不扣費）"
-retrieved: 2026-11-18T09:14:15+08:00
+retrieved: 2026-11-18T09:20:27+08:00
 ---
 
 # WaveSpeed 模型價格總表
@@ -94,7 +94,7 @@ retrieved: 2026-11-18T09:14:15+08:00
 | `wavespeed-ai/qwen-image-2.0/edit`                        | $0.030   | 固定             | 無                                                         | 無       |
 | `wavespeed-ai/qwen-image-2.0/text-to-image`               | $0.030   | 固定             | 無                                                         | 無       |
 | `wavespeed-ai/qwen-image-2.1/edit`                        | $0.030   | $0.030 ～ $0.300 | images、resolution                                         | 無       |
-| `bytedance/seedream-v5.5/edit`                            | $0.028   | $0.028 ～ $0.134 | images、resolution                                         | 無       |
+| `bytedance/seedream-v5.5/edit`                            | $0.028   | $0.028 ～ $0.115 | images、resolution                                         | 95％     |
 | `kwaivgi/kling-image-v3/edit`                             | $0.028   | $0.028 ～ $0.252 | num_images                                                 | 無       |
 | `kwaivgi/kling-image-v3/text-to-image`                    | $0.028   | $0.028 ～ $0.252 | num_images                                                 | 無       |
 | `bytedance/seedream-v4`                                   | $0.027   | 固定             | 無                                                         | 無       |
@@ -107,7 +107,7 @@ retrieved: 2026-11-18T09:14:15+08:00
 | `openai/gpt-image-2.5-sunburst/text-to-image`             | $0.024   | $0.010 ～ $1.000 | quality、resolution                                        | 無       |
 | `wavespeed-ai/flux-2-dev/edit`                            | $0.024   | 固定             | 無                                                         | 無       |
 | `wavespeed-ai/flux-2-klein-base-9b/edit`                  | $0.021   | 固定             | 無                                                         | 無       |
-| `bytedance/seedream-v5.5`                                 | $0.020   | $0.020 ～ $0.054 | resolution                                                 | 無       |
+| `bytedance/seedream-v5.5`                                 | $0.020   | $0.020 ～ $0.035 | resolution                                                 | 95％     |
 | `wavespeed-ai/minimax-h3-image/text-to-image`             | $0.020   | $0.020 ～ $0.120 | resolution                                                 | 無       |
 | `wavespeed-ai/minimax-h3/text-to-image`                   | $0.020   | $0.020 ～ $0.060 | resolution                                                 | 無       |
 | `wavespeed-ai/moss-image/text-to-image`                   | $0.020   | $0.020 ～ $0.080 | resolution                                                 | 無       |
