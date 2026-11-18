@@ -8,7 +8,7 @@
     wsgen --list
     wsgen -m seedream-v4.5 --size 1440x2560
     wsgen -m grok-imagine-image-v2.0-text-to-image -p prompts/xxx.txt --resolution 1k
-    wsgen -m flux-3-klein-image-distilled-edit --image refs/a.png --prompt "Move the subject to a forest"
+    wsgen -m wavespeed-flux-3-klein-image-distilled-edit --image refs/a.png --prompt "Move the subject to a forest"
     wsgen -m seedream-v4.5 --help          顯示該模型腳本自己的參數說明
 """
 
@@ -18,6 +18,9 @@ from pathlib import Path
 
 SCRIPTS_DIR = Path(__file__).resolve().parent / "scripts"
 COMMON_MODULE = "wavespeed_common"
+
+sys.path.insert(0, str(SCRIPTS_DIR))
+from wavespeed_common import output_slug  # noqa: E402
 
 
 def available_models() -> list[str]:
@@ -38,13 +41,12 @@ def usage(error: str | None = None) -> None:
 def candidates(model: str) -> list[str]:
     """接受腳本名、含 .py 的檔名，或 供應商/模型路徑 形式的模型 ID，回傳可能的腳本名
 
-    模型 ID 去掉供應商前綴後可能只剩任務類別（例如 midjourney/text-to-image）或以版號開頭（例如 krea/v3/text-to-image），
-    因此保留供應商的形式也要一併嘗試。
+    模型 ID 依 wavespeed_common.output_slug 推算腳本名，與各腳本的檔名規則一致。
     """
     model = model.removesuffix(".py")
     if "/" not in model:
         return [model]
-    return [model.split("/", 1)[1].replace("/", "-"), model.replace("/", "-")]
+    return [output_slug(model)]
 
 
 def split_args(argv: list[str]) -> tuple[str | None, list[str]]:

@@ -13,7 +13,7 @@ WaveSpeed 目錄中可用參考圖、帶提示詞且本專案尚無腳本的 57 
 未列入本表的端點：
 
 - `sequential`、`edit-multi`、`multiple-angles` 與 LoRA 變體，依 `AGENTS.md` 的慣例不實作。
-- `wavespeed-ai/z-image-turbo/image-to-image`，因為 `z-image-turbo` 腳本已可透過 `image` 欄位帶參考圖。
+- `wavespeed-ai/z-image-turbo/image-to-image`，因為 `wavespeed-z-image-turbo` 腳本已可透過 `image` 欄位帶參考圖。
 - `ideogram-ai/ideogram-vector/text-to-vector` 與 `wavespeed-ai/z-image-turbo/controlnet`，分別輸出向量圖與依控制圖生成，用途與一般參考圖不同。
 - 無提示詞端點與 `image-to-image`、`text-to-image` 以外的類型，例如去背、放大與圖層分解工具。
 

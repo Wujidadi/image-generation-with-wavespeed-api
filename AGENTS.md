@@ -8,8 +8,10 @@
 - 各模型腳本 `scripts/<模型名稱>.py` 只做三件事：定義 `MODEL_ID`、以 `add_model_args(parser)` 加入模型專屬參數、以 `build_payload(args, prompt)` 回傳 `prompt` 以外的請求欄位，最後呼叫 `ws.run(MODEL_ID, add_model_args, build_payload)`。
   支援參考圖的腳本另外定義 `IMAGE_INPUT = ws.ImageInput(...)` 並傳給 `ws.run`；`--image` 參數、張數檢查、上傳、報價與寫入請求欄位都由共用邏輯處理，`build_payload` 不經手參考圖。
 - 檔名即模型名稱，規則是模型 ID 去掉供應商前綴、斜線改連字號，例如 `x-ai/grok-imagine-image-v2.0/text-to-image` 對應 `grok-imagine-image-v2.0-text-to-image.py`。
-  `wsgen --list` 與預設輸出目錄都依此規則自動推算，新增腳本不需改 `wsgen`。
-  例外是去掉前綴後只剩任務類別或以版號開頭的模型 ID：`midjourney/text-to-image` 與 `krea/v3/text-to-image` 會保留供應商，對應 `midjourney-text-to-image.py` 與 `krea-v3-text-to-image.py`，判斷依據是 `wavespeed_common.output_slug`。
+  `wsgen` 以模型 ID 找腳本與預設輸出目錄都依此規則自動推算，新增腳本不需改 `wsgen`；判斷依據是 `wavespeed_common.output_slug`。
+  - WaveSpeed 自家模型（`wavespeed-ai/`）一律改加 `wavespeed-` 前綴，避免與原廠同名模型衝突，例如 `wavespeed-ai/qwen-image/edit` 對應 `wavespeed-qwen-image-edit.py`。
+  - 去掉前綴後只剩任務類別或以版號開頭的模型 ID 保留供應商：`midjourney/text-to-image` 與 `krea/v3/text-to-image` 對應 `midjourney-text-to-image.py` 與 `krea-v3-text-to-image.py`。
+  - 依上述規則推算會撞名或無法辨識供應商的模型，名稱寫在 `wavespeed_common.OUTPUT_SLUG_OVERRIDES`，例如 `wavespeed-ai/minimax-h3/image-edit` 對應 `wavespeed-minimax-h3-edit.py`。
 
 ## 慣例
 
@@ -18,7 +20,7 @@
   `documents/` 尚未收錄的模型，改以 `GET /api/v3/models` 回傳的 `api_schema.api_schemas[].request_schema` 為準，那是同一份 Input Schema 的線上版本。
 - 參考圖依端點型態實作：
   - 文生圖端點本身有選填圖片欄位（`image`、`reference`、`sref`）時，在既有腳本加 `IMAGE_INPUT`；`strength` 這類只在有參考圖時才有意義的參數列入 `dependents`。
-  - 參考圖獨立成 edit 端點時，新增一支腳本，檔名照樣由模型 ID 推算，例如 `wavespeed-ai/flux-3-klein-image-distilled/edit` 對應 `flux-3-klein-image-distilled-edit.py`；該腳本的 `aspect_ratio` 等欄位依 edit 端點的 Input Schema，不沿用文生圖的預設值。
+  - 參考圖獨立成 edit 端點時，新增一支腳本，檔名照樣由模型 ID 推算，例如 `wavespeed-ai/flux-3-klein-image-distilled/edit` 對應 `wavespeed-flux-3-klein-image-distilled-edit.py`；該腳本的 `aspect_ratio` 等欄位依 edit 端點的 Input Schema，不沿用文生圖的預設值。
   - `min_items`、`max_items` 照抄 Input Schema 的 `minItems`、`maxItems`；部分模型按張數加價，因此張數一律在本機先擋下。
   - 遮罩欄位（`mask_image`、`mask_url`）、LoRA、`sequential`、`edit-multi`、`multiple-angles` 端點不在本專案範圍。
   - 來源圖與輔助參考圖分屬兩個欄位時（`ideogram-ai/ideogram-v4.5/edit`）用 `rest_field`，第一張進 `field`，其餘進 `rest_field`。

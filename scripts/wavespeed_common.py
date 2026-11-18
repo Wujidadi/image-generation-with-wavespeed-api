@@ -29,6 +29,12 @@ UPLOAD_TIMEOUT = 120.0
 COMMENT_PREFIXES = ("#", "//")
 TASK_SLUGS = {"text-to-image", "image-to-image", "text-to-video", "image-to-video", "edit"}
 VERSION_SEGMENT = re.compile(r"v?\d+(\.\d+)*")
+WAVESPEED_PROVIDER = "wavespeed-ai"
+OUTPUT_SLUG_OVERRIDES = {
+    "wavespeed-ai/minimax-h3/image-edit": "wavespeed-minimax-h3-edit",
+    "minimax/h3-image/text-to-image": "minimax-h3-image-text-to-image",
+    "minimax/h3-image/edit": "minimax-h3-image-edit",
+}
 
 PROJECT_ROOT = Path(__file__).resolve().parent.parent
 DEFAULT_PROMPT_FILE = PROJECT_ROOT / "prompts" / "default.txt"
@@ -70,13 +76,19 @@ class ImageInput:
 
 
 def output_slug(model_id: str) -> str:
-    """去掉供應商前綴後，以連字號串接模型路徑，作為預設輸出子目錄名稱
+    """去掉供應商前綴後，以連字號串接模型路徑，作為腳本名稱與預設輸出子目錄名稱
 
+    WaveSpeed 自家（wavespeed-ai）的模型一律以 wavespeed- 開頭，避免與原廠同名模型衝突。
     少數模型 ID 去掉前綴後只剩任務類別（例如 midjourney/text-to-image）或只剩版號開頭（例如 krea/v3/text-to-image），
     此時保留供應商才能辨識模型。
+    依上述規則推算會撞名或無法辨識的模型，名稱改由 OUTPUT_SLUG_OVERRIDES 指定。
     """
+    if model_id in OUTPUT_SLUG_OVERRIDES:
+        return OUTPUT_SLUG_OVERRIDES[model_id]
     provider, _, rest = model_id.partition("/")
     slug = rest.replace("/", "-")
+    if provider == WAVESPEED_PROVIDER:
+        return f"wavespeed-{slug}"
     keep_provider = slug in TASK_SLUGS or VERSION_SEGMENT.fullmatch(rest.split("/", 1)[0]) is not None
     return f"{provider}-{slug}" if keep_provider else slug
 
