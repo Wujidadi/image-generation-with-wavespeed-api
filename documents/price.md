@@ -2,12 +2,12 @@
 sources:
   - "GET https://api.wavespeed.ai/api/v3/models（模型目錄，含 base_price 與 Input Schema）"
   - "POST https://api.wavespeed.ai/api/v3/model/price（逐項報價，呼叫本端點不扣費）"
-retrieved: 2026-11-07T22:59:03+08:00
+retrieved: 2026-11-18T09:14:15+08:00
 ---
 
 # WaveSpeed 模型價格總表
 
-本專案已串接的 108 個模型，單次成功呼叫、產出 1 張圖的美元金額。
+本專案已串接的 112 個模型，單次成功呼叫、產出 1 張圖的美元金額。
 依預設價格由高至低排列，同價者依模型 ID 排序。
 
 各欄位的定義：
@@ -72,6 +72,7 @@ retrieved: 2026-11-07T22:59:03+08:00
 | `wavespeed-ai/flux-2-turbo/text-to-image`                 | $0.040   | 固定             | 無                                                         | 無       |
 | `openai/gpt-image-2.5-flare/edit`                         | $0.039   | $0.025 ～ $1.240 | images、quality、resolution                                | 無       |
 | `openai/gpt-image-2.5-sunburst/edit`                      | $0.039   | $0.025 ～ $1.240 | images、quality、resolution                                | 無       |
+| `minimax/h3-image/edit`                                   | $0.038   | $0.038 ～ $0.218 | images、resolution                                         | 無       |
 | `alibaba/wan-2.5/image-edit`                              | $0.035   | 固定             | 無                                                         | 無       |
 | `alibaba/wan-2.6/image-edit`                              | $0.035   | 固定             | 無                                                         | 無       |
 | `bytedance/seedream-v5.0-lite`                            | $0.035   | 固定             | 無                                                         | 無       |
@@ -83,9 +84,11 @@ retrieved: 2026-11-07T22:59:03+08:00
 | `alibaba/wan-2.7/image-edit`                              | $0.030   | 固定             | 無                                                         | 無       |
 | `alibaba/wan-2.7/text-to-image`                           | $0.030   | 固定             | 無                                                         | 無       |
 | `krea/v3/text-to-image`                                   | $0.030   | $0.002 ～ $0.120 | size                                                       | 無       |
+| `minimax/h3-image/text-to-image`                          | $0.030   | $0.030 ～ $0.090 | resolution                                                 | 無       |
 | `wavespeed-ai/flux-2-flash/edit`                          | $0.030   | $0.030 ～ $0.040 | images                                                     | 無       |
 | `wavespeed-ai/flux-3-klein-image-base/text-to-image`      | $0.030   | $0.030 ～ $0.120 | resolution                                                 | 無       |
 | `wavespeed-ai/krea-v2-medium/text-to-image`               | $0.030   | 固定             | 無                                                         | 無       |
+| `wavespeed-ai/minimax-h3-image/edit`                      | $0.030   | $0.030 ～ $0.260 | images、resolution                                         | 無       |
 | `wavespeed-ai/minimax-h3/image-edit`                      | $0.030   | $0.030 ～ $0.130 | images、resolution                                         | 無       |
 | `wavespeed-ai/p-h3-image/edit`                            | $0.030   | $0.030 ～ $0.220 | images、resolution                                         | 無       |
 | `wavespeed-ai/qwen-image-2.0/edit`                        | $0.030   | 固定             | 無                                                         | 無       |
@@ -105,6 +108,7 @@ retrieved: 2026-11-07T22:59:03+08:00
 | `wavespeed-ai/flux-2-dev/edit`                            | $0.024   | 固定             | 無                                                         | 無       |
 | `wavespeed-ai/flux-2-klein-base-9b/edit`                  | $0.021   | 固定             | 無                                                         | 無       |
 | `bytedance/seedream-v5.5`                                 | $0.020   | $0.020 ～ $0.054 | resolution                                                 | 無       |
+| `wavespeed-ai/minimax-h3-image/text-to-image`             | $0.020   | $0.020 ～ $0.120 | resolution                                                 | 無       |
 | `wavespeed-ai/minimax-h3/text-to-image`                   | $0.020   | $0.020 ～ $0.060 | resolution                                                 | 無       |
 | `wavespeed-ai/moss-image/text-to-image`                   | $0.020   | $0.020 ～ $0.080 | resolution                                                 | 無       |
 | `wavespeed-ai/p-h3-image/text-to-image`                   | $0.020   | $0.020 ～ $0.120 | resolution                                                 | 無       |

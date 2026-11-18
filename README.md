@@ -38,7 +38,7 @@
 
 ### 模型專屬參數
 
-共 108 個模型。各參數的可選值與預設值以 `./wsgen -m <模型名稱> --help` 為準。
+共 112 個模型。各參數的可選值與預設值以 `./wsgen -m <模型名稱> --help` 為準。
 「每張價格」為全用預設參數時的單張定價，括號內是把所有計費參數同時拉到最低與最高檔位的範圍；
 完整的價格區間、影響計費的參數與帳戶折扣見 [模型價格總表](documents/price.md)，
 調查方法與測試成本見 [模型價格調查與測試成本](.claude/plans/model-pricing-and-test-cost.md)。
@@ -70,6 +70,8 @@
 | `krea-v3-edit`                                         | `krea/v3/edit`                                            | $0.240（$0.004 ～ $1.080） | `--image` `--negative-prompt` `--size` `--model` `--reasoning-level` `--output-format` `--seed`                      |
 | `krea-v3-text-to-image`                                | `krea/v3/text-to-image`                                   | $0.030（$0.002 ～ $0.120） | `--negative-prompt` `--size` `--model` `--reasoning-level` `--output-format` `--seed`                                |
 | `midjourney-text-to-image`                             | `midjourney/text-to-image`                                | $0.100（$0.100 ～ $0.150） | `--image` `--aspect-ratio` `--hd` `--quality` `--stylize` `--chaos` `--weird` `--seed`                               |
+| `minimax-h3-image-edit`                                | `minimax/h3-image/edit`                                   | $0.038（$0.038 ～ $0.218） | `--image` `--aspect-ratio` `--resolution` `--output-format`                                                          |
+| `minimax-h3-image-text-to-image`                       | `minimax/h3-image/text-to-image`                          | $0.030（$0.030 ～ $0.090） | `--aspect-ratio` `--resolution` `--output-format`                                                                    |
 | `nano-banana-2-edit`                                   | `google/nano-banana-2/edit`                               | $0.070（$0.045 ～ $0.168） | `--image` `--aspect-ratio` `--resolution` `--enable-web-search` `--enable-image-search` `--output-format`            |
 | `nano-banana-2-edit-fast`                              | `google/nano-banana-2/edit-fast`                          | $0.045（$0.045 ～ $0.064） | `--image` `--aspect-ratio` `--resolution` `--enable-web-search` `--output-format`                                    |
 | `nano-banana-2-lite-edit`                              | `google/nano-banana-2-lite/edit`                          | $0.040                     | `--image` `--aspect-ratio` `--output-format`                                                                         |
@@ -136,6 +138,8 @@
 | `wavespeed-krea-v2-medium-turbo-text-to-image`         | `wavespeed-ai/krea-v2-medium-turbo/text-to-image`         | $0.015（$0.015 ～ $0.018） | `--image` `--aspect-ratio` `--creativity`                                                                            |
 | `wavespeed-krea-v2-turbo`                              | `wavespeed-ai/krea-v2/turbo`                              | $0.012（$0.012 ～ $0.024） | `--image` `--aspect-ratio` `--resolution` `--seed` `--strength`                                                      |
 | `wavespeed-minimax-h3-edit`                            | `wavespeed-ai/minimax-h3/image-edit`                      | $0.030（$0.030 ～ $0.130） | `--image` `--aspect-ratio` `--resolution` `--output-format` `--seed`                                                 |
+| `wavespeed-minimax-h3-image-edit`                      | `wavespeed-ai/minimax-h3-image/edit`                      | $0.030（$0.030 ～ $0.260） | `--image` `--aspect-ratio` `--resolution` `--output-format` `--seed`                                                 |
+| `wavespeed-minimax-h3-image-text-to-image`             | `wavespeed-ai/minimax-h3-image/text-to-image`             | $0.020（$0.020 ～ $0.120） | `--aspect-ratio` `--resolution` `--output-format` `--seed`                                                           |
 | `wavespeed-minimax-h3-text-to-image`                   | `wavespeed-ai/minimax-h3/text-to-image`                   | $0.020（$0.020 ～ $0.060） | `--aspect-ratio` `--resolution` `--output-format` `--seed`                                                           |
 | `wavespeed-moss-image-text-to-image`                   | `wavespeed-ai/moss-image/text-to-image`                   | $0.020（$0.020 ～ $0.080） | `--aspect-ratio` `--resolution` `--output-format` `--seed`                                                           |
 | `wavespeed-p-h3-image-edit`                            | `wavespeed-ai/p-h3-image/edit`                            | $0.030（$0.030 ～ $0.220） | `--image` `--aspect-ratio` `--resolution` `--output-format` `--seed`                                                 |
@@ -225,7 +229,7 @@ python3 tools/models_snapshot.py --diff-only            # 不呼叫 API，只比
 | `scripts/<模型名稱>.py`        | 各模型腳本，只定義模型 ID、專屬參數與 payload                            |
 | `prompts/`                     | 提示詞檔                                                                 |
 | `output/`                      | 預設輸出目錄，圖片副檔名已在 `.gitignore` 排除                           |
-| `documents/`                   | 官方 API 文件、原始 HTML 與 llms.txt；`price.md` 為 108 個模型的價格總表 |
+| `documents/`                   | 官方 API 文件、原始 HTML 與 llms.txt；`price.md` 為 112 個模型的價格總表 |
 | `documents/snapshots/`         | 模型目錄快照，由 `tools/models_snapshot.py` 產生                         |
 | `tools/models_snapshot.py`     | 擷取模型目錄快照並與前一份比對，列出新增、下架與改價的模型               |
 | `.claude/plans/`               | 調查與規劃文件，含價格調查方法與測試成本估算                             |
