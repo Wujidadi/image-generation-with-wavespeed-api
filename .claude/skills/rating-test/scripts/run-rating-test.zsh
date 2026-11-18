@@ -1,5 +1,5 @@
 #!/usr/bin/env zsh
-# 對指定模型跑普通級（G）、輔導級（PG13）、限制級（R18）的生圖測試，原始輸出存成 log。
+# 對指定模型跑普遍級（G）、輔導級（PG13）、限制級（R18）的生圖測試，原始輸出存成 log。
 #
 # 用法：
 #   run-rating-test.zsh [--config 檔案] [--ratings G,PG13,R18] [--dry-run] <模型腳本名稱>...
