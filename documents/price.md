@@ -2,12 +2,12 @@
 sources:
   - "GET https://api.wavespeed.ai/api/v3/models（模型目錄，含 base_price 與 Input Schema）"
   - "POST https://api.wavespeed.ai/api/v3/model/price（逐項報價，呼叫本端點不扣費）"
-retrieved: 2026-11-18T09:20:27+08:00
+retrieved: 2026-11-19T05:22:56+08:00
 ---
 
 # WaveSpeed 模型價格總表
 
-本專案已串接的 112 個模型，單次成功呼叫、產出 1 張圖的美元金額。
+本專案已串接的 117 個模型，單次成功呼叫、產出 1 張圖的美元金額。
 依預設價格由高至低排列，同價者依模型 ID 排序。
 
 各欄位的定義：
@@ -21,6 +21,9 @@ retrieved: 2026-11-18T09:20:27+08:00
 | --------------------------------------------------------- | -------- | ---------------- | ---------------------------------------------------------- | -------- |
 | `wavespeed-ai/hunyuan-image-3-instruct/edit`              | $0.450   | 固定             | 無                                                         | 無       |
 | `wavespeed-ai/hunyuan-image-3-instruct/text-to-image`     | $0.450   | 固定             | 無                                                         | 無       |
+| `kwaivgi/kling-image-v4.0/image-set`                      | $0.252   | $0.252 ～ $1.600 | images、num_images、resolution                             | 無       |
+| `recraft-ai/recraft-v4.1-pro/text-to-image`               | $0.250   | 固定             | 無                                                         | 無       |
+| `recraft-ai/recraft-v4.1-pro/text-to-image-utility`       | $0.250   | 固定             | 無                                                         | 無       |
 | `krea/v3/edit`                                            | $0.240   | $0.004 ～ $1.080 | images、size                                               | 無       |
 | `google/nano-banana-pro/edit-ultra`                       | $0.150   | $0.150 ～ $0.180 | resolution                                                 | 無       |
 | `google/nano-banana-pro/text-to-image-ultra`              | $0.150   | $0.150 ～ $0.180 | resolution                                                 | 無       |
@@ -44,6 +47,7 @@ retrieved: 2026-11-18T09:20:27+08:00
 | `wavespeed-ai/qwen-image-2.0-pro/text-to-image`           | $0.070   | 固定             | 無                                                         | 無       |
 | `openai/gpt-image-2.6-flare/edit`                         | $0.065   | $0.045 ～ $1.090 | images、quality、resolution                                | 90％     |
 | `openai/gpt-image-2.6-sunburst/edit`                      | $0.065   | $0.045 ～ $1.090 | images、quality、resolution                                | 90％     |
+| `kwaivgi/kling-image-v4.0/text-to-image`                  | $0.063   | $0.063 ～ $1.413 | num_images、resolution                                     | 無       |
 | `ideogram-ai/ideogram-v4.5`                               | $0.060   | $0.030 ～ $0.220 | quality                                                    | 無       |
 | `ideogram-ai/ideogram-v4.5/edit`                          | $0.060   | $0.008 ～ $0.220 | quality                                                    | 無       |
 | `openai/gpt-image-2/text-to-image`                        | $0.060   | $0.010 ～ $0.720 | quality、resolution                                        | 95％     |
@@ -69,6 +73,7 @@ retrieved: 2026-11-18T09:20:27+08:00
 | `google/nano-banana-2-lite/text-to-image`                 | $0.040   | 固定             | 無                                                         | 無       |
 | `google/nano-banana-2.1/text-to-image`                    | $0.040   | $0.040 ～ $0.163 | enable_image_search、enable_web_search、resolution         | 90％     |
 | `nvidia/cosmos-3-super/text-to-image`                     | $0.040   | 固定             | 無                                                         | 無       |
+| `recraft-ai/recraft-v4.1/text-to-image`                   | $0.040   | 固定             | 無                                                         | 無       |
 | `wavespeed-ai/flux-2-turbo/text-to-image`                 | $0.040   | 固定             | 無                                                         | 無       |
 | `openai/gpt-image-2.5-flare/edit`                         | $0.039   | $0.025 ～ $1.240 | images、quality、resolution                                | 無       |
 | `openai/gpt-image-2.5-sunburst/edit`                      | $0.039   | $0.025 ～ $1.240 | images、quality、resolution                                | 無       |

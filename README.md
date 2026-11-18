@@ -38,7 +38,7 @@
 
 ### 模型專屬參數
 
-共 112 個模型。各參數的可選值與預設值以 `./wsgen -m <模型名稱> --help` 為準。
+共 117 個模型。各參數的可選值與預設值以 `./wsgen -m <模型名稱> --help` 為準。
 「每張價格」為全用預設參數時的單張定價，括號內是把所有計費參數同時拉到最低與最高檔位的範圍；
 完整的價格區間、影響計費的參數與帳戶折扣見 [模型價格總表](documents/price.md)，
 調查方法與測試成本見 [模型價格調查與測試成本](.claude/plans/model-pricing-and-test-cost.md)。
@@ -67,6 +67,8 @@
 | `ideogram-v4.5-edit`                                   | `ideogram-ai/ideogram-v4.5/edit`                          | $0.060（$0.008 ～ $0.220） | `--image` `--quality` `--edit-precision` `--size`                                                                    |
 | `kling-image-v3-edit`                                  | `kwaivgi/kling-image-v3/edit`                             | $0.028（$0.028 ～ $0.252） | `--image` `--aspect-ratio` `--resolution` `--num-images` `--output-format`                                           |
 | `kling-image-v3-text-to-image`                         | `kwaivgi/kling-image-v3/text-to-image`                    | $0.028（$0.028 ～ $0.252） | `--aspect-ratio` `--resolution` `--num-images` `--output-format`                                                     |
+| `kling-image-v4.0-image-set`                           | `kwaivgi/kling-image-v4.0/image-set`                      | $0.252（$0.252 ～ $1.600） | `--image` `--aspect-ratio` `--resolution` `--num-images` `--output-format`                                           |
+| `kling-image-v4.0-text-to-image`                       | `kwaivgi/kling-image-v4.0/text-to-image`                  | $0.063（$0.063 ～ $1.413） | `--aspect-ratio` `--resolution` `--num-images` `--output-format`                                                     |
 | `krea-v3-edit`                                         | `krea/v3/edit`                                            | $0.240（$0.004 ～ $1.080） | `--image` `--negative-prompt` `--size` `--model` `--reasoning-level` `--output-format` `--seed`                      |
 | `krea-v3-text-to-image`                                | `krea/v3/text-to-image`                                   | $0.030（$0.002 ～ $0.120） | `--negative-prompt` `--size` `--model` `--reasoning-level` `--output-format` `--seed`                                |
 | `midjourney-text-to-image`                             | `midjourney/text-to-image`                                | $0.100（$0.100 ～ $0.150） | `--image` `--aspect-ratio` `--hd` `--quality` `--stylize` `--chaos` `--weird` `--seed`                               |
@@ -89,6 +91,9 @@
 | `qwen-image-3.0-pro-text-to-image`                     | `alibaba/qwen-image-3.0-pro/text-to-image`                | $0.040（$0.040 ～ $0.075） | `--aspect-ratio` `--resolution` `--enable-prompt-expansion` `--seed`                                                 |
 | `qwen-image-3.0-text-to-image`                         | `alibaba/qwen-image-3.0/text-to-image`                    | $0.030                     | `--aspect-ratio` `--resolution` `--enable-prompt-expansion` `--seed`                                                 |
 | `recraft-v4.1-flash-text-to-image`                     | `recraft-ai/recraft-v4.1-flash/text-to-image`             | $0.008                     | `--aspect-ratio`                                                                                                     |
+| `recraft-v4.1-pro-text-to-image`                       | `recraft-ai/recraft-v4.1-pro/text-to-image`               | $0.250                     | `--image-size`                                                                                                       |
+| `recraft-v4.1-pro-text-to-image-utility`               | `recraft-ai/recraft-v4.1-pro/text-to-image-utility`       | $0.250                     | `--image-size`                                                                                                       |
+| `recraft-v4.1-text-to-image`                           | `recraft-ai/recraft-v4.1/text-to-image`                   | $0.040                     | `--image-size`                                                                                                       |
 | `seedream-v4`                                          | `bytedance/seedream-v4`                                   | $0.027                     | `--size`                                                                                                             |
 | `seedream-v4-edit`                                     | `bytedance/seedream-v4/edit`                              | $0.027                     | `--image` `--size`                                                                                                   |
 | `seedream-v4.5`                                        | `bytedance/seedream-v4.5`                                 | $0.040                     | `--size`                                                                                                             |
@@ -172,7 +177,7 @@
 ./wsgen -m wavespeed-z-image-turbo --image refs/a.png --strength 0.6 --prompt "The same warrior in a bamboo forest"
 ```
 
-- 不收參考圖的文生圖模型：`cosmos-3-super`、`hunyuan-image-2.1`、`hunyuan-image-3`、`krea-v2-medium`、`moss-image`、`recraft-v4.1-flash`。
+- 不收參考圖的文生圖模型：`cosmos-3-super`、`hunyuan-image-2.1`、`hunyuan-image-3`、`krea-v2-medium`、`moss-image`、`recraft-v4.1`、`recraft-v4.1-flash`、`recraft-v4.1-pro`、`recraft-v4.1-pro-text-to-image-utility`。
 - `sequential`、`edit-multi`、`multiple-angles` 與 LoRA 端點沒有腳本。
 - `ideogram-v4.5-edit` 的第一張是來源圖，其餘是輔助參考圖；遮罩欄位不開放。
 - 張數上下限依模型而定，見 `--help`；張數不符、路徑重複、檔案不存在或不是圖片時，在上傳與扣費之前就會被擋下。
@@ -229,7 +234,7 @@ python3 tools/models_snapshot.py --diff-only            # 不呼叫 API，只比
 | `scripts/<模型名稱>.py`        | 各模型腳本，只定義模型 ID、專屬參數與 payload                            |
 | `prompts/`                     | 提示詞檔                                                                 |
 | `output/`                      | 預設輸出目錄，圖片副檔名已在 `.gitignore` 排除                           |
-| `documents/`                   | 官方 API 文件、原始 HTML 與 llms.txt；`price.md` 為 112 個模型的價格總表 |
+| `documents/`                   | 官方 API 文件、原始 HTML 與 llms.txt；`price.md` 為 117 個模型的價格總表 |
 | `documents/snapshots/`         | 模型目錄快照，由 `tools/models_snapshot.py` 產生                         |
 | `tools/models_snapshot.py`     | 擷取模型目錄快照並與前一份比對，列出新增、下架與改價的模型               |
 | `.claude/plans/`               | 調查與規劃文件，含價格調查方法與測試成本估算                             |
