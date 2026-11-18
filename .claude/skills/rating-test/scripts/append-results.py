@@ -13,13 +13,14 @@ import json
 import re
 import shutil
 import subprocess
-from datetime import date
+from datetime import date, datetime
 from pathlib import Path
 
 PROJECT_ROOT = Path(__file__).resolve().parents[4]
 
 PRICE_ROW = re.compile(r"\| `([^`]+)`\s*\| \$([\d.]+)\s*\|[^|]*\|[^|]*\| ([^|]+?)\s*\|")
 HEADING = "## {day} 新增模型實測（待併入上表）"
+UPDATED = re.compile(r"^updated: .*$", re.MULTILINE)
 
 
 def load_prices(price_md: Path) -> dict[str, str]:
@@ -109,6 +110,7 @@ def main() -> None:
             continue
         review = Path(meta["reviews"][rating])
         text = review.read_text(encoding="utf-8").rstrip("\n")
+        text = UPDATED.sub(f"updated: {datetime.now().astimezone().isoformat(timespec='seconds')}", text, count=1)
         review.write_text(f"{text}\n\n{heading}\n\n{table}\n", encoding="utf-8")
         if shutil.which("md-fmt"):
             subprocess.run(["md-fmt", "--tables-only", str(review)], check=False, capture_output=True)

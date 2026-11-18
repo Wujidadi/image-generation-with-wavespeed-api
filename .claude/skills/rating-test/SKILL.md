@@ -41,7 +41,9 @@ description: 對 WaveSpeed 文生圖模型做普遍級（G）、輔導級（PG-1
    python3 .claude/skills/rating-test/scripts/append-results.py <結果目錄>
    ```
    先加 `--print-only` 檢視，再正式附加。表格以「## <日期> 新增模型實測（待併入上表）」為標題接在各 Markdown 最下方，不動既有表格；有 `md-fmt` 時會自動對齊表格。
+   正式附加時會把各 Markdown 檔頭 front matter 的 `updated` 改為當下時間。
 6. **回報**：列出每個模型在三個等級的時長與是否被擋，提醒使用者評圖後自行併入主表，並說明 `.html` 未重新產生（合併後以 `md2html <檔案>` 不帶參數轉出）。
+7. **合併後重產 HTML**：使用者併入主表後，先把三份 Markdown 的 `updated` 改為以指令取得的當下時間，再以 `md2html <檔案>` 不帶參數逐一轉出 `.html`。
 
 ## 表格規則
 
